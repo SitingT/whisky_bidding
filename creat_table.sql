@@ -135,4 +135,95 @@ CREATE TABLE OfflinePayments (
     FOREIGN KEY (MethodID) REFERENCES PaymentMethods(MethodID)
 );
 
+-- update this status after transaction
+DELIMITER $$
+CREATE TRIGGER UpdateAuctionStatusAfterTransaction
+AFTER UPDATE ON Transactions
+FOR EACH ROW
+BEGIN
+  IF NEW.TransactionStatus = 'Completed' THEN
+    UPDATE WhiskyDetails
+    SET AuctionStatus = 'Inactive'
+    WHERE ItemID = NEW.ItemID;
+  END IF;
+END$$
+
+DELIMITER ;
+
+
+
+DELIMITER $$
+
+-- one someone input new rating, update overall rating
+CREATE TRIGGER UpdateUserOverallRatingAfterReviewUpdate
+AFTER UPDATE ON Reviews
+FOR EACH ROW
+BEGIN
+    DECLARE avgRating DECIMAL(3, 2);
+    
+    -- Calculate the new average rating for the reviewee, only considering non-deleted reviews
+    SELECT AVG(Rating) INTO avgRating
+    FROM Reviews
+    WHERE RevieweeID = NEW.RevieweeID AND IsDeleted = FALSE;
+    
+    -- Update the Users table with the new average rating
+    UPDATE Users
+    SET OverallRating = avgRating
+    WHERE UserID = NEW.RevieweeID;
+END$$
+
+DELIMITER ;
+
+
+--  Block User Procedure: A procedure to block a user and cancel their active auctions and transactions
+
+DELIMITER $$
+
+CREATE PROCEDURE BlockUser(IN userID INT)
+BEGIN
+    -- Check if the user exists
+    DECLARE userExists INT;
+    SELECT COUNT(*) INTO userExists FROM Users WHERE UserID = userID;
+    IF userExists = 0 THEN
+        -- If the user does not exist
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'User does not exist.';
+    END IF;
+    
+    -- Block the user
+    UPDATE Users
+    SET IsBlocked = TRUE
+    WHERE UserID = userID;
+    
+    -- Cancel initiated transactions where the user is the seller
+    UPDATE Transactions
+    SET TransactionStatus = 'Cancelled'
+    WHERE SellerID = userID AND TransactionStatus = 'Initiated';
+    
+    -- Cancel active auctions where the user is the seller
+    UPDATE WhiskyDetails
+    SET AuctionStatus = 'Canceled'
+    WHERE SellerID = userID AND AuctionStatus = 'Active';
+    
+    -- Optionally, if there's any cleanup or additional logging required, include it here
+    -- For example, logging the block action, notifying the user, etc.
+END$$
+
+DELIMITER ;
+
+CREATE VIEW UserOverview AS
+SELECT
+    u.UserID,
+    u.Username,
+    u.Email,
+    COUNT(DISTINCT wd.ItemID) AS AuctionsInitiated,
+    COUNT(DISTINCT t.TransactionID) AS TransactionsCompleted,
+    u.OverallRating
+FROM
+    Users u
+LEFT JOIN WhiskyDetails wd ON u.UserID = wd.SellerID
+LEFT JOIN Transactions t ON u.UserID = t.SellerID AND t.TransactionStatus = 'Completed'
+GROUP BY
+    u.UserID;
+
+
 
