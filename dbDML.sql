@@ -3,10 +3,10 @@ INSERT INTO Users (Username, Email, Password, UserType, RegistrationDate, LastLo
 ('BobJones', 'bob.jones@foxmail.com', 'bobjonespassword', 'Admin', '2024-02-05 08:30:00', '2024-02-10 11:45:00', false, 4.7),
 ('CathyLee', 'cathy.lee@qq.com', 'cathypass', 'Normal', '2024-03-15 10:00:00', '2024-03-20 09:30:00', true, 3.8),
 ('DavidKim', 'david.kim@outlook.com', 'davidsecure', 'Normal', '2024-04-25 14:00:00', '2024-04-30 16:00:00', false, 4.5),
-('PeterWu', 'peterwu@icloud.com', 'password123', 'Normal', '2024-03-10 14:00:00', '2024-03-10 14:30:00', FALSE, 4.5),
-('OliverChiu', 'oliverchiu@163.com', 'securepass', 'Admin', '2024-03-09 10:00:00', '2024-03-10 09:30:00', FALSE, 4.7),
-('MikeSmith', 'mikesmith@yahoo.com', 'mikepassword', 'Normal', '2024-03-08 16:00:00', '2024-03-09 17:00:00', TRUE, 3.8),
-('HannahJones', 'hannahjones@gmail.com', 'hannah1234', 'Normal', '2024-03-07 12:00:00', '2024-03-08 13:00:00', FALSE, 4.2);
+('PeterWu', 'peterwu@icloud.com', 'password123', 'Normal', '2024-03-10 14:00:00', '2024-03-10 14:30:00', FALSE, 0),
+('OliverChiu', 'oliverchiu@163.com', 'securepass', 'Admin', '2024-03-09 10:00:00', '2024-03-10 09:30:00', FALSE, 0),
+('MikeSmith', 'mikesmith@yahoo.com', 'mikepassword', 'Normal', '2024-03-08 16:00:00', '2024-03-09 17:00:00', TRUE, 0),
+('HannahJones', 'hannahjones@gmail.com', 'hannah1234', 'Normal', '2024-03-07 12:00:00', '2024-03-08 13:00:00', FALSE, 0);
 
 INSERT INTO PaymentMethods (MethodID, MethodName, MethodType, Description, Status) VALUES 
 (1, 'PayPal', 'Online', 'Online payment system', true),

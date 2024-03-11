@@ -175,6 +175,32 @@ END$$
 DELIMITER ;
 
 
+DELIMITER $$
+
+CREATE TRIGGER UpdateUserOverallRatingAfterReviewInsert
+AFTER INSERT ON Reviews
+FOR EACH ROW
+BEGIN
+    DECLARE avgRating DECIMAL(3, 2);
+    
+    -- Calculate the new average rating for the reviewee, considering only non-deleted reviews
+    SELECT AVG(Rating) INTO avgRating
+    FROM Reviews
+    WHERE RevieweeID = NEW.RevieweeID AND IsDeleted = FALSE;
+    
+    -- Update the Users table with the new average rating
+    UPDATE Users
+    SET OverallRating = avgRating
+    WHERE UserID = NEW.RevieweeID;
+END$$
+
+DELIMITER ;
+
+
+
+
+
+
 --  Block User Procedure: A procedure to block a user and cancel their active auctions and transactions
 
 DELIMITER $$
