@@ -27,7 +27,8 @@ GROUP BY
     u.Username, wd.Category;
 /*
 List of all bidders who have bid on multiple whiskies, 
-sorted by the number of distinct whiskies they have bid on in descending order.*/
+sorted by the number of distinct whiskies they have bid on in descending order.
+*/
 SELECT
     BidderID,
     COUNT(DISTINCT ItemID) AS NumWhiskiesBidOn
