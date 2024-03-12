@@ -1,5 +1,7 @@
-/*
-Calculate the total value of bids for each type of whisky
+-- 1. Calculate the total value of bids for each type of whisky
+/* expected output
+
+
 */
 SELECT
     wd.Category AS WhiskyType,
