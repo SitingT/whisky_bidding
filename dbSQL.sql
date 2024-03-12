@@ -1,7 +1,10 @@
 -- 1. Calculate the total value of bids for each type of whisky
 /* expected output
-
-
+# WhiskyType, TotalBidValue
+'Single Malt', '355.00'
+'Blended Malt', '540.00'
+'Grain Whisky', '55.00'
+'Single Pot Still', '550.00'
 */
 SELECT
     wd.Category AS WhiskyType,
@@ -12,8 +15,16 @@ JOIN
     Bids b ON wd.ItemID = b.ItemID
 GROUP BY
     wd.Category;
-/*
-Calculate the average bid amount for each type of whisky sold by each seller
+    
+    
+    
+-- 2. Calculate the average bid amount for each type of whisky sold by each seller
+/* expected output
+# Seller, WhiskyType, AverageBidAmount
+'AliceSmith', 'Single Malt', '118.333333'
+'BobJones', 'Blended Malt', '180.000000'
+'CathyLee', 'Grain Whisky', '55.000000'
+'DavidKim', 'Single Pot Still', '550.000000'
 */
 SELECT
     u.Username AS Seller,
@@ -27,9 +38,15 @@ JOIN
     Bids b ON wd.ItemID = b.ItemID
 GROUP BY
     u.Username, wd.Category;
-/*
-List of all bidders who have bid on multiple whiskies, 
-sorted by the number of distinct whiskies they have bid on in descending order.
+    
+    
+    
+-- 3.  List of all bidders who have bid on multiple whiskies,
+-- sorted by the number of distinct whiskies they have bid on in descending order.   
+/* expected output
+# BidderID, NumWhiskiesBidOn
+'1', '2'
+'4', '2'
 */
 SELECT
     BidderID,
@@ -42,8 +59,14 @@ HAVING
     COUNT(DISTINCT ItemID) > 1
 ORDER BY
     NumWhiskiesBidOn DESC;
-/*
-Retrieve the bidding history for Scotch whisky, where users can view the chronological history of bids.
+    
+    
+    
+-- 4. Retrieve the bidding history for Scotch whisky, 
+-- where users can view the chronological history of bids.
+/* expected output
+# BidderID, TotalBids, AverageBidAmount
+'2', '2', '112.500000'
 */
 SELECT
     b.BidderID,
@@ -59,9 +82,16 @@ HAVING
     COUNT(*) > 1
 ORDER BY
     MIN(b.BidTime);
-/*
-Find the highest bid for each whisky, 
-using a subquery to determine the maximum bid amount for each whisky
+    
+    
+    
+-- 5. Find the highest bid for each whisky, using a subquery to determine the maximum bid amount for each whisky.
+/* expected output
+# ItemID, WhiskyType, HighestBidAmount
+'2', 'Blended Malt', '210.00'
+'3', 'Grain Whisky', '55.00'
+'4', 'Single Pot Still', '550.00'
+'1', 'Single Malt', '130.00'
 */
 SELECT
     wd.ItemID,
