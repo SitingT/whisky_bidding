@@ -1,5 +1,5 @@
 -- 1. Calculate the total value of bids for each type of whisky
-/* expected output
+/* expected output:
 # WhiskyType, TotalBidValue
 'Single Malt', '355.00'
 'Blended Malt', '540.00'
@@ -19,7 +19,7 @@ GROUP BY
     
     
 -- 2. Calculate the average bid amount for each type of whisky sold by each seller
-/* expected output
+/* expected output:
 # Seller, WhiskyType, AverageBidAmount
 'AliceSmith', 'Single Malt', '118.333333'
 'BobJones', 'Blended Malt', '180.000000'
@@ -43,7 +43,7 @@ GROUP BY
     
 -- 3.  List of all bidders who have bid on multiple whiskies,
 -- sorted by the number of distinct whiskies they have bid on in descending order.   
-/* expected output
+/* expected output:
 # BidderID, NumWhiskiesBidOn
 '1', '2'
 '4', '2'
@@ -64,7 +64,7 @@ ORDER BY
     
 -- 4. Retrieve the bidding history for Scotch whisky, 
 -- where users can view the chronological history of bids.
-/* expected output
+/* expected output:
 # BidderID, TotalBids, AverageBidAmount
 '2', '2', '112.500000'
 */
@@ -86,7 +86,7 @@ ORDER BY
     
     
 -- 5. Find the highest bid for each whisky, using a subquery to determine the maximum bid amount for each whisky.
-/* expected output
+/* expected output:
 # ItemID, WhiskyType, HighestBidAmount
 '2', 'Blended Malt', '210.00'
 '3', 'Grain Whisky', '55.00'
