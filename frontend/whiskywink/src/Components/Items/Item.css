@@ -1,26 +1,38 @@
-.item{
-    width: 350px;
- 
+.item {
+    flex: 0 0 auto; /* Do not grow or shrink */
+    width: calc(25% - 30px); /* Adjust width, accounting for the gap */
+    margin: 0 auto; /* Center .item within its parent if necessary */
+    transition: transform 0.6s; /* Smooth transition for hover effect */
 }
-.item p{
-    margin: 6px 0px;
+
+.item:hover {
+    transform: scale(1.05); /* Scale up .item on hover */
 }
-.item-prices{
+
+.item img {
+    width: 300px; /* Set your desired width */
+    height: 200px; /* Set your desired height */
+    object-fit: cover; /* This will crop the image to fill the dimensions */
+}
+
+.item p {
+    margin: 6px 0; /* Margin for paragraphs within .item */
+}
+
+.item-prices {
     display: flex;
-    gap: 20px;
+    gap: 20px; /* Spacing between children in .item-prices */
 }
-.item-price-new{
-    color: #374151;
-    font-size: 18x;
-    font-weight: 600;
+
+.item-price-new,
+.item-price-old {
+    font-size: 18px; /* Font size for price labels */
+    font-weight: 600; /* Font weight for new price */
+    color: #374151; /* Text color for new price */
 }
-.item-price-old{
-    color: #8c8c8c;
-    font-size: 18x;
-    font-weight: 500;
-    text-decoration: line-through;
-}
-.item:hover{
-    transform: scale(1.05);
-    transition: 0.6s;
+
+.item-price-old {
+    font-weight: 500; /* Font weight for old price */
+    color: #8c8c8c; /* Text color for old price */
+    text-decoration: line-through; /* Old price strikethrough */
 }
