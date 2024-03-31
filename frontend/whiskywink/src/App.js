@@ -8,6 +8,7 @@ import Cart from './Components/Pages/Cart';
 // import Shop from './Components/Pages/Shop'; 
 import Footer from './Components/Footer/Footer'; 
 import Popular from './Components/Popular/Popular';
+import NewsLetter from './Components/NewsLetter/NewsLetter';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path='/login' element={<LoginSignup/>} />
         </Routes>
         <Popular/>
+        <NewsLetter/>
         <Footer/>
       </BrowserRouter>
     
