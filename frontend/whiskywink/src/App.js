@@ -1,10 +1,10 @@
 import './App.css';
+import ShopCategory from './Pages/ShopCategory';
 import Navbar from './Components/NavBar/NavBar';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import ShopCategory from './Components/Pages/ShopCategory';
-import LoginSignup from './Components/Pages/LoginSignup';
-import Product from './Components/Pages/Product'; 
-import Cart from './Components/Pages/Cart'; 
+import LoginSignup from './Pages/LoginSignup';
+import Product from './Pages/Product'; 
+import Cart from './Pages/Cart'; 
 // import Shop from './Components/Pages/Shop'; 
 import Footer from './Components/Footer/Footer'; 
 import Popular from './Components/Popular/Popular';
@@ -27,8 +27,6 @@ function App() {
           <Route path='/cart' element={<Cart/>} />
           <Route path='/login' element={<LoginSignup/>} />
         </Routes>
-        <Popular/>
-        <NewsLetter/>
         <Footer/>
       </BrowserRouter>
     
