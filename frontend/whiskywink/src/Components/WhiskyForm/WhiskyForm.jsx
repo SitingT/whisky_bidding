@@ -1,12 +1,25 @@
 import React, { useState } from "react";
+import {
+  TextField,
+  Button,
+  Grid,
+  Container,
+  Typography,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+} from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 function WhiskyForm() {
+  // Initialize formState with StartTime set to now
   const [formState, setFormState] = useState({
-    SellerID: "3",
+    SellerID: "1",
     StartPrice: "",
     BuyNowPrice: "",
     Description: "",
-    StartTime: "",
+    StartTime: new Date().toISOString().slice(0, 16),
     EndTime: "2024-04-15T12:00:00Z",
     Category: "",
     Availability: true,
@@ -22,16 +35,16 @@ function WhiskyForm() {
       [name]: value,
     }));
   };
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // Clone formState to modify StartTime without affecting state directly
     const dataToSend = { ...formState };
-
-    // Check if StartTime doesn't end with 'Z', then append ':00Z' to match the ISO format
     if (!dataToSend.StartTime.endsWith("Z")) {
       dataToSend.StartTime += ":00Z";
+    }
+    if (!dataToSend.EndTime.endsWith("Z")) {
+      dataToSend.EndTime += ":00Z";
     }
 
     console.log("Data preparation timestamp:", new Date().toISOString());
@@ -48,6 +61,7 @@ function WhiskyForm() {
       .then((data) => {
         console.log("Success:", data);
         alert("Whisky submitted successfully!");
+        navigate("/");
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -58,68 +72,114 @@ function WhiskyForm() {
   };
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <h2>Submit Whisky</h2>
-        <form onSubmit={handleSubmit}>
-          <label>
-            StartTime:
-            <input
-              name="StartTime"
+    <Container maxWidth="sm">
+      <Typography variant="h4" component="h1" gutterBottom>
+        Submit Whisky
+      </Typography>
+      <form onSubmit={handleSubmit}>
+        <Grid container spacing={2}>
+          {/* StartTime is now set by default to the current time */}
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              label="StartTime"
               type="datetime-local"
+              name="StartTime"
               value={formState.StartTime}
-              onChange={handleChange}
+              InputLabelProps={{ shrink: true }}
+              disabled
             />
-          </label>
-          <label>
-            BuyNowPrice:
-            <input
+          </Grid>
+          {/* EndTime allows user definition */}
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              label="EndTime"
+              type="datetime-local"
+              name="EndTime"
+              value={formState.EndTime}
+              onChange={handleChange}
+              InputLabelProps={{ shrink: true }}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              label="BuyNowPrice"
               name="BuyNowPrice"
-              type="text"
               value={formState.BuyNowPrice}
               onChange={handleChange}
             />
-          </label>
-          <label>
-            StartPrice:
-            <input
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              label="StartPrice"
               name="StartPrice"
-              type="text"
               value={formState.StartPrice}
               onChange={handleChange}
             />
-          </label>
-          <label>
-            TastingNotes:
-            <input
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              label="TastingNotes"
               name="TastingNotes"
-              type="text"
               value={formState.TastingNotes}
               onChange={handleChange}
             />
-          </label>
-          <label>
-            Description:
-            <input
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              label="Description"
               name="Description"
-              type="text"
               value={formState.Description}
               onChange={handleChange}
             />
-          </label>
-          <label>
-            Category:
-            <input
-              name="Category"
-              type="text"
-              value={formState.Category}
-              onChange={handleChange}
-            />
-          </label>
-          <button type="submit">Submit</button>
-        </form>
-      </header>
-    </div>
+          </Grid>
+          <Grid item xs={12}>
+            <FormControl fullWidth>
+              <InputLabel>Category</InputLabel>
+              <Select
+                label="Category"
+                name="Category"
+                value={formState.Category}
+                onChange={handleChange}
+              >
+                <MenuItem value="Bourbon">Bourbon</MenuItem>
+                <MenuItem value="Scotch">Scotch</MenuItem>
+                <MenuItem value="Japanese">Japanese</MenuItem>
+                <MenuItem value="Irish">Irish</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12}>
+            <FormControl fullWidth>
+              <InputLabel>Condition</InputLabel>
+              <Select
+                label="Condition"
+                name="Condition"
+                value={formState.Condition}
+                onChange={handleChange}
+              >
+                <MenuItem value="Unopened">Unopened</MenuItem>
+                <MenuItem value="OpenedButSealed">Opened But Sealed</MenuItem>
+                <MenuItem value="OpenedWithoutSeal">
+                  Opened Without Seal
+                </MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+          {/* Other fields remain unchanged */}
+          <Grid item xs={12}>
+            <Button type="submit" variant="contained" color="primary">
+              Submit
+            </Button>
+          </Grid>
+        </Grid>
+      </form>
+    </Container>
   );
 }
 
