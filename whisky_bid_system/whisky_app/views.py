@@ -29,10 +29,10 @@ def whisky_create(request):
     data = request.data.copy()  # Make a mutable copy
 
     # Use dateutil's parse function, which can handle the 'Z' suffix.
-    start_time_str = data.get('StartTime', '')
-    if start_time_str:
-        start_time = parse_datetime(start_time_str)
-        if start_time <= timezone.now():
+    end_time_str = data.get('EndTime', '')
+    if end_time_str:
+        end_time_str = parse_datetime(end_time_str)
+        if end_time_str >= timezone.now():
             data['AuctionStatus'] = 'Active'
         else:
             data['AuctionStatus'] = 'Inactive'
