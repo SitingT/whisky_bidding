@@ -22,4 +22,5 @@ from whisky_app import views
 
 urlpatterns = [
     path('create_user/', views.UserCreate.as_view(), name='create_user'),
+    path('whisky/create/', views.whisky_create, name='whisky-create'),
 ]

@@ -1,5 +1,12 @@
 from rest_framework import serializers
 from .models import User
+from .models import WhiskyDetail
+
+
+class WhiskyDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WhiskyDetail
+        fields = '__all__'
 
 
 class UserSerializer(serializers.ModelSerializer):
