@@ -16,8 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.urls import path
+from whisky_app import views
+
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-
+    path('create_user/', views.UserCreate.as_view(), name='create_user'),
 ]
