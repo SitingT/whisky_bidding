@@ -1,4 +1,4 @@
-#!/Users/Jessica/Desktop/cs5200/Project/venv/bin/python3.11
+#!/Users/Jessica/Desktop/cs5200/Project/whisky_bidding/venv/bin/python3.12
 # -*- coding: utf-8 -*-
 import re
 import sys

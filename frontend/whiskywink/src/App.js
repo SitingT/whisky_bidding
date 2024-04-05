@@ -7,8 +7,8 @@ import Product from './Pages/Product';
 import Cart from './Pages/Cart'; 
 // import Shop from './Components/Pages/Shop'; 
 import Footer from './Components/Footer/Footer'; 
-import Popular from './Components/Popular/Popular';
-import NewsLetter from './Components/NewsLetter/NewsLetter';
+// import Popular from './Components/Popular/Popular';
+// import NewsLetter from './Components/NewsLetter/NewsLetter';
 
 function App() {
   return (
