@@ -53,18 +53,24 @@ def active_whisky_list(request):
     # Get current time
     now = timezone.now()
 
-    # Fetch all active whisky details
-    active_whiskies = WhiskyDetail.objects.filter(AuctionStatus='Active')
+    # Optional category parameter from the request
+    category = request.query_params.get('category', None)
 
-    # List to hold whiskies that are still active after checking end time
+    # Start with all whiskies that have 'Active' status
+    query = WhiskyDetail.objects.filter(AuctionStatus='Active')
+
+    # If a category is specified, further filter the active whiskies by that category
+    if category in ['Scotch', 'Bourbon', 'Japanese', 'Irish']:
+        query = query.filter(Category=category)
+
     still_active_whiskies = []
 
-    for whisky in active_whiskies:
+    for whisky in query:
+        # Check if the whisky's auction is still active based on the end time
         if whisky.EndTime >= now:
-            # Whisky auction is still active, add to list
             still_active_whiskies.append(whisky)
         else:
-            # Update AuctionStatus to 'Inactive' if the end time is past
+            # If the end time is past, update the auction status to 'Inactive'
             whisky.AuctionStatus = 'Inactive'
             whisky.save()
 

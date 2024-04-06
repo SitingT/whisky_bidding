@@ -19,14 +19,14 @@ INSERT INTO PaymentMethods (MethodID, MethodName, MethodType, Description, Statu
 (8, 'Cash on Delivery', 'Offline', 'Payment in cash upon delivery', FALSE);
 
 INSERT INTO WhiskyDetails (SellerID, StartPrice, BuyNowPrice, Description, AuctionStatus, StartTime, EndTime, Category, Availability, `Condition`, TastingNotes, Region) VALUES 
-(1, 100.00, 150.00, 'Rare single malt whisky', 'Active', '2023-03-01 00:00:00', '2023-03-10 00:00:00', 'Single Malt', true, 'Unopened', 'Smooth with a hint of smoke', 'Speyside'),
-(2, 200.00, 300.00, 'Aged 18 years', 'Inactive', '2023-02-01 00:00:00', '2023-02-10 00:00:00', 'Blended Malt', false, 'OpenedButSealed', 'Rich and complex', 'Highland'),
-(3, 50.00, 75.00, 'Budget-friendly choice', 'Canceled', '2023-01-01 00:00:00', '2023-01-10 00:00:00', 'Grain Whisky', true, 'OpenedWithoutSeal', 'Light and floral', 'Lowland'),
-(4, 500.00, 1000.00, 'Collector\'s edition', 'Active', '2023-04-01 00:00:00', '2023-04-10 00:00:00', 'Single Pot Still', true, 'Unopened', 'Exceptionally smooth with a hint of vanilla', 'Islay'),
-(5, 100.00, 200.00, 'Rare single malt Scotch whisky', 'Active', '2024-03-10 10:00:00', '2024-03-17 10:00:00', 'Scotch Whisky', TRUE, 'Unopened', 'Smooth with a hint of peat', 'Speyside'),
-(6, 150.00, 300.00, 'Aged bourbon whiskey', 'Active', '2024-03-11 12:00:00', '2024-03-18 12:00:00', 'Bourbon Whiskey', TRUE, 'OpenedButSealed', 'Rich and full-bodied', 'Kentucky'),
-(7, 80.00, 160.00, 'Japanese whisky with unique flavor', 'Inactive', '2024-03-09 09:00:00', '2024-03-16 09:00:00', 'Japanese Whisky', FALSE, 'OpenedWithoutSeal', 'Fruity with a smooth finish', 'Hokkaido'),
-(8, 200.00, 400.00, 'Exclusive Irish whiskey', 'Canceled', '2024-03-08 15:00:00', '2024-03-15 15:00:00', 'Irish Whiskey', TRUE, 'Unopened', 'Light and floral', 'Cork');
+(1, 100.00, 150.00, 'Rare single malt whisky', 'Active', '2023-03-01 00:00:00', '2026-03-10 00:00:00', 'Scotch', true, 'Unopened', 'Smooth with a hint of smoke', 'Speyside'),
+(2, 200.00, 300.00, 'Aged 18 years', 'Active', '2023-02-01 00:00:00', '2026-02-10 00:00:00', 'Scotch', false, 'OpenedButSealed', 'Rich and complex', 'Highland'),
+(3, 50.00, 75.00, 'Budget-friendly choice', 'Active', '2023-01-01 00:00:00', '2026-01-10 00:00:00', 'Bourbon', true, 'OpenedWithoutSeal', 'Light and floral', 'Lowland'),
+(4, 500.00, 1000.00, 'Collector\'s edition', 'Active', '2023-04-01 00:00:00', '2026-04-10 00:00:00', 'Scotch', true, 'Unopened', 'Exceptionally smooth with a hint of vanilla', 'Islay'),
+(5, 100.00, 200.00, 'Rare single malt Scotch whisky', 'Active', '2024-03-10 10:00:00', '2026-03-17 10:00:00', 'Irish', TRUE, 'Unopened', 'Smooth with a hint of peat', 'Speyside'),
+(6, 150.00, 300.00, 'Aged bourbon whiskey', 'Active', '2024-03-11 12:00:00', '2026-03-18 12:00:00', 'japanese', TRUE, 'OpenedButSealed', 'Rich and full-bodied', 'Kentucky'),
+(7, 80.00, 160.00, 'Japanese whisky with unique flavor', 'Active', '2024-03-09 09:00:00', '2026-03-16 09:00:00', 'Japanese ', FALSE, 'OpenedWithoutSeal', 'Fruity with a smooth finish', 'Hokkaido'),
+(8, 200.00, 400.00, 'Exclusive Irish whiskey', 'Active', '2024-03-08 15:00:00', '2024-03-15 15:00:00', 'Irish ', TRUE, 'Unopened', 'Light and floral', 'Cork');
 
 INSERT INTO Bids (BidID, ItemID, BidderID, BidAmount, BidTime) VALUES 
 (1, 1, 2, 105.00, '2023-03-02 12:00:00'),
