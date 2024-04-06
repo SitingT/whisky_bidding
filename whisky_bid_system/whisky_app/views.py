@@ -50,32 +50,26 @@ def whisky_create(request):
 
 @api_view(['GET'])
 def active_whisky_list(request):
-    # Get current time
-    now = timezone.now()
+    # Normalize the 'category' parameter to handle different capitalizations
+    category_query = request.query_params.get('category', None)
+    if category_query:
+        category = category_query.capitalize()
+    else:
+        category = None  # Ensure category is None if not provided
+    VALID_CATEGORIES = ['Scotch', 'Bourbon', 'Japanese', 'Irish']
+    end_time_str = request.query_params.get('end_time', None)
 
-    # Optional category parameter from the request
-    category = request.query_params.get('category', None)
+    # Initialize the query with all objects
+    query = WhiskyDetail.objects.all()
 
-    # Start with all whiskies that have 'Active' status
-    query = WhiskyDetail.objects.filter(AuctionStatus='Active')
-
-    # If a category is specified, further filter the active whiskies by that category
-    if category in ['Scotch', 'Bourbon', 'Japanese', 'Irish']:
+    # Apply category filtering if valid
+    if category in VALID_CATEGORIES:
         query = query.filter(Category=category)
+    elif category is not None:
+        # Return an error response if an invalid category is provided
+        return JsonResponse({"error": "Invalid category provided. Please choose from Scotch, Bourbon, Japanese, Irish."},
+                            status=status.HTTP_400_BAD_REQUEST)
 
-    still_active_whiskies = []
-
-    for whisky in query:
-        # Check if the whisky's auction is still active based on the end time
-        if whisky.EndTime >= now:
-            still_active_whiskies.append(whisky)
-        else:
-            # If the end time is past, update the auction status to 'Inactive'
-            whisky.AuctionStatus = 'Inactive'
-            whisky.save()
-
-    # Serialize the whiskies that are still active
-    serializer = WhiskyDetailSerializer(still_active_whiskies, many=True)
-
-    # Return the serialized data
+    # Serialize and return the filtered queryset
+    serializer = WhiskyDetailSerializer(query, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
