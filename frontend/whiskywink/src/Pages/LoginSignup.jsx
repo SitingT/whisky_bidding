@@ -9,7 +9,7 @@ const LoginSignup = () => {
 
     const handleSubmit = (event) => {
         console.log("!!!", name, email, password);
-        // debugger;
+        // debugger; <-- 
         event.preventDefault();
 
         // Process the form data here
