@@ -13,6 +13,7 @@ from .models import WhiskyDetail
 from .serializers import WhiskyDetailSerializer
 from datetime import datetime
 from dateutil.parser import parse as parse_datetime
+from django.db.models import Q
 
 
 class UserCreate(APIView):
@@ -45,3 +46,30 @@ def whisky_create(request):
     else:
         # Return validation errors if the data is invalid.
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def active_whisky_list(request):
+    # Get current time
+    now = timezone.now()
+
+    # Fetch all active whisky details
+    active_whiskies = WhiskyDetail.objects.filter(AuctionStatus='Active')
+
+    # List to hold whiskies that are still active after checking end time
+    still_active_whiskies = []
+
+    for whisky in active_whiskies:
+        if whisky.EndTime >= now:
+            # Whisky auction is still active, add to list
+            still_active_whiskies.append(whisky)
+        else:
+            # Update AuctionStatus to 'Inactive' if the end time is past
+            whisky.AuctionStatus = 'Inactive'
+            whisky.save()
+
+    # Serialize the whiskies that are still active
+    serializer = WhiskyDetailSerializer(still_active_whiskies, many=True)
+
+    # Return the serialized data
+    return Response(serializer.data, status=status.HTTP_200_OK)
