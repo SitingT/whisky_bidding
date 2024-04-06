@@ -17,17 +17,17 @@ function App() {
       <BrowserRouter>
         <Navbar />
         <Routes>
-          <Route path="/" element={<ShopCategory category="all" />} />
+          <Route path="/" element={<ShopCategory category="All" />} />
           <Route
             path="/bourbon"
-            element={<ShopCategory category="bourbon" />}
+            element={<ShopCategory category="Bourbon" />}
           />
-          <Route path="/scotch" element={<ShopCategory category="scotch" />} />
+          <Route path="/scotch" element={<ShopCategory category="Scotch" />} />
           <Route
             path="/japanese"
-            element={<ShopCategory category="japanese" />}
+            element={<ShopCategory category="Japanese" />}
           />
-          <Route path="/irish" element={<ShopCategory category="irish" />} />
+          <Route path="/irish" element={<ShopCategory category="Irish" />} />
           <Route path="/product" element={<Product />}>
             <Route path=":productId" element={<Product />} />
           </Route>
