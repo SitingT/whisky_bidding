@@ -56,15 +56,25 @@ def active_whisky_list(request):
         category = category_query.capitalize()
     else:
         category = None  # Ensure category is None if not provided
-    VALID_CATEGORIES = ['Scotch', 'Bourbon', 'Japanese', 'Irish']
-    end_time_str = request.query_params.get('end_time', None)
 
-    # Initialize the query with all objects
-    query = WhiskyDetail.objects.all()
+    # Define valid categories
+    VALID_CATEGORIES = ['Scotch', 'Bourbon', 'Japanese', 'Irish']
+
+    # Initialize the query with all objects, filtering out only those with EndTime greater than now
+    query = WhiskyDetail.objects.filter(AuctionStatus='Active')
+
+    # Update the AuctionStatus based on EndTime; this could be optimized as a database operation
+    # Note: This approach updates the status in Python, not in the database
+    for whisky in query:
+        if whisky.EndTime >= timezone.now():
+            whisky.AuctionStatus = 'Active'
+        else:
+            whisky.AuctionStatus = 'Inactive'
+            whisky.save()
 
     # Apply category filtering if valid
     if category in VALID_CATEGORIES:
-        query = query.filter(Category=category)
+        query = query.filter(Category=category, AuctionStatus='Active')
     elif category is not None:
         # Return an error response if an invalid category is provided
         return JsonResponse({"error": "Invalid category provided. Please choose from Scotch, Bourbon, Japanese, Irish."},
