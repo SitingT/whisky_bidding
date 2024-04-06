@@ -8,7 +8,10 @@ const LoginSignup = () => {
     const [password, setPassword] = useState('');
 
     const handleSubmit = (event) => {
+        console.log("!!!", name, email, password);
+        // debugger;
         event.preventDefault();
+
         // Process the form data here
     };
 
