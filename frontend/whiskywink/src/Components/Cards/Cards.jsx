@@ -55,14 +55,33 @@ const WhiskyCard = ({ whisky, image }) => (
       <Button
         variant="contained"
         style={{
-          backgroundColor: "#E6E6FA",
+          backgroundColor: "#D8BFD8",
           color: "black",
-          left: "20px",
+          padding: "3px 6px", // Smaller padding
+          fontSize: "0.875rem", // Smaller font size
+          height: "32px",
+
+          //   left: "20px",
         }}
       >
         Buy Now: ${whisky.BuyNowPrice}
       </Button>
-      <div style={{ position: "absolute", right: "30px" }}>
+
+      <Button
+        variant="contained"
+        style={{
+          backgroundColor: "#D8BFD8",
+          color: "black",
+          padding: "3px 6px", // Smaller padding
+          fontSize: "0.875rem", // Smaller font size
+          height: "32px",
+          left: "5px",
+        }}
+      >
+        Bid Now: ${whisky.StartPrice}
+      </Button>
+
+      <div style={{ position: "absolute", right: "5px" }}>
         <IconButton aria-label="view image">
           <img src={ImageButtonAsset} alt="View" />
         </IconButton>
