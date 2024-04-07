@@ -251,5 +251,6 @@ LEFT JOIN Transactions t ON u.UserID = t.SellerID AND t.TransactionStatus = 'Com
 GROUP BY
     u.UserID;
 
+ALTER TABLE WhiskyDetails ADD COLUMN HighestBid DECIMAL(10, 2);
 
 
