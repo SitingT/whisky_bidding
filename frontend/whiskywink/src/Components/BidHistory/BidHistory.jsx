@@ -1,4 +1,23 @@
 import React, { useState, useEffect } from "react";
+import {
+  List,
+  ListItem,
+  ListItemText,
+  Divider,
+  Typography,
+  Container,
+  Box,
+  Paper,
+  Alert,
+  ListItemAvatar,
+  Avatar,
+} from "@mui/material";
+
+// Dummy image paths, replace these with your actual import paths
+import ScotchImage from "../Assets/product_1.png";
+import BourbonImage from "../Assets/product_2.png";
+import JapaneseImage from "../Assets/product_3.png";
+import IrishImage from "../Assets/product_4.png";
 
 const BidHistory = ({ customerID, status }) => {
   const [bids, setBids] = useState([]);
@@ -7,7 +26,6 @@ const BidHistory = ({ customerID, status }) => {
   const url = `${baseUrl}${customerID}/bids_status/${
     status ? `?status=${status}` : ""
   }`;
-  console.log(url);
 
   useEffect(() => {
     fetch(url)
@@ -19,39 +37,74 @@ const BidHistory = ({ customerID, status }) => {
       })
       .then((data) => {
         setBids(data);
-        console.log("Bids fetched successfully:", data);
       })
       .catch((error) => {
-        console.error("Error fetching bids:", error);
         setError(error.toString());
       });
-  }, [customerID, status]); // Dependency array includes both customerID and status to refetch when either changes
+  }, [customerID, status]);
 
-  if (error) {
-    return <p>Error fetching bids: {error}</p>;
-  }
+  const getCategoryImage = (category) => {
+    switch (category) {
+      case "Scotch":
+        return ScotchImage;
+      case "Bourbon":
+        return BourbonImage;
+      case "Japanese":
+        return JapaneseImage;
+      case "Irish":
+        return IrishImage;
+      default:
+        return ""; // Default image or leave as blank
+    }
+  };
 
   return (
-    <div>
-      <h2>Bid Status for Customer {customerID}</h2>
-      {bids.length > 0 ? (
-        <ul>
-          {bids.map((bid) => (
-            <li key={bid.BidID}>
-              <p>Item ID: {bid.ItemID}</p>
-              <p>Bid Amount: {bid.BidAmount}</p>
-              <p>Bid Time: {bid.BidTime}</p>
-              <p>Auction Status: {bid.AuctionStatus}</p>
-              <p>Bid Status: {bid.BidStatus}</p>
-              <p>Category: {bid.Category}</p>
-              <p>EndTime: {bid.EndTime}</p>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No bids found for this status.</p>
-      )}
-    </div>
+    <Container maxWidth="sm">
+      <Box sx={{ my: 6 }}>
+        {error && <Alert severity="error">Error fetching bids: {error}</Alert>}
+        {bids.length > 0 ? (
+          <Paper elevation={3}>
+            <List>
+              {bids.map((bid, index) => (
+                <React.Fragment key={bid.BidID}>
+                  <ListItem alignItems="flex-start">
+                    <ListItemAvatar>
+                      <Avatar
+                        alt={bid.Category}
+                        src={getCategoryImage(bid.Category)}
+                        variant="square"
+                        sx={{ width: 56, height: 56, marginRight: 2 }}
+                      />
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={`Item ID: ${bid.ItemID}, Bid: $${bid.BidAmount}`}
+                      secondary={
+                        <>
+                          <Typography
+                            component="span"
+                            variant="body2"
+                            color="text.primary"
+                          >
+                            {`Auction Status: ${bid.AuctionStatus}, Bid Status: ${bid.BidStatus}`}
+                          </Typography>
+                          —{" "}
+                          {`Bid Time: ${bid.BidTime}, Category: ${bid.Category}, End Time: ${bid.EndTime}`}
+                        </>
+                      }
+                    />
+                  </ListItem>
+                  {index < bids.length - 1 && (
+                    <Divider variant="inset" component="li" />
+                  )}
+                </React.Fragment>
+              ))}
+            </List>
+          </Paper>
+        ) : (
+          <Typography>No bids found for this status.</Typography>
+        )}
+      </Box>
+    </Container>
   );
 };
 
