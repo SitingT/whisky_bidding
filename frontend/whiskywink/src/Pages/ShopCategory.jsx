@@ -43,12 +43,9 @@ const ShopCategory = ({ category }) => {
     let whiskyCategory =
       category !== "All" && category ? category.toLowerCase() : undefined;
     if (!whiskyCategory && whisky.Category) {
-      // Make sure to access `Category` as it appears in your data
       whiskyCategory = whisky.Category.toLowerCase();
     }
     console.log("Selected category:", whiskyCategory);
-
-    // If whiskyCategory is still undefined (or not found in categoryImages), default to BourbonDrink
     return categoryImages[whiskyCategory] || BourbonDrink;
   };
 
