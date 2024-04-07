@@ -57,14 +57,12 @@ def active_whisky_list(request):
     else:
         category = None  # Ensure category is None if not provided
 
-    # Define valid categories
     VALID_CATEGORIES = ['Scotch', 'Bourbon', 'Japanese', 'Irish']
 
     # Initialize the query with all objects, filtering out only those with EndTime greater than now
     query = WhiskyDetail.objects.filter(AuctionStatus='Active')
 
-    # Update the AuctionStatus based on EndTime; this could be optimized as a database operation
-    # Note: This approach updates the status in Python, not in the database
+    # Update the AuctionStatus based on EndTime;
     for whisky in query:
         if whisky.EndTime >= timezone.now():
             whisky.AuctionStatus = 'Active'
