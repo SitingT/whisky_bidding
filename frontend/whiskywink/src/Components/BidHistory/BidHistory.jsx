@@ -43,6 +43,8 @@ const BidHistory = ({ customerID, status }) => {
               <p>Bid Time: {bid.BidTime}</p>
               <p>Auction Status: {bid.AuctionStatus}</p>
               <p>Bid Status: {bid.BidStatus}</p>
+              <p>Category: {bid.Category}</p>
+              <p>EndTime: {bid.EndTime}</p>
             </li>
           ))}
         </ul>
