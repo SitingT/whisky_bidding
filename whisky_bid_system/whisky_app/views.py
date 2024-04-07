@@ -167,6 +167,8 @@ def customer_bids_win_lose_status(request, customer_id):
         results.append({
             'BidID': bid.BidID,
             'ItemID': whisky.ItemID,
+            'Category': whisky.Category,
+            'EndTime': whisky.EndTime,
             'BidAmount': bid.BidAmount,
             'BidTime': bid.BidTime,
             'AuctionStatus': auction_status,
