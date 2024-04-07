@@ -147,6 +147,9 @@ def customer_bids_win_lose_status(request, customer_id):
 
         # Determine if the auction is active or not
         auction_status = 'Active' if whisky.EndTime >= timezone.now() else 'Inactive'
+        if auction_status == 'Inactive':
+            whisky.AuctionStatus = 'Inactive'
+            whisky.save()
 
         if auction_status == 'Inactive':
             # Check if this bid is the winning bid
