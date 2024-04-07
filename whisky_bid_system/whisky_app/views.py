@@ -1,5 +1,5 @@
 from django.shortcuts import render
-
+from django.http import JsonResponse
 # Create your views here.
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -9,11 +9,11 @@ from .serializers import UserSerializer
 from datetime import datetime
 from django.utils import timezone
 from rest_framework.decorators import api_view
-from .models import WhiskyDetail
-from .serializers import WhiskyDetailSerializer
+from .models import WhiskyDetail, Bid
+from .serializers import WhiskyDetailSerializer, BidSerializer
 from datetime import datetime
 from dateutil.parser import parse as parse_datetime
-from django.db.models import Q
+from django.db.models import Q, Max
 
 
 class UserCreate(APIView):
@@ -81,3 +81,24 @@ def active_whisky_list(request):
     # Serialize and return the filtered queryset
     serializer = WhiskyDetailSerializer(query, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+def whisky_highest_bid(request, item_id):
+    try:
+        # Try to fetch the whisky detail by ItemID
+        whisky = WhiskyDetail.objects.get(ItemID=item_id)
+    except WhiskyDetail.DoesNotExist:
+        # Return an error response if the whisky does not exist
+        return JsonResponse({"error": "Whisky not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    # Try to fetch the highest bid for the whisky
+    highest_bid = Bid.objects.filter(ItemID=whisky).aggregate(Max('BidAmount'))
+
+    # Check if there is at least one bid
+    if highest_bid['BidAmount__max'] is not None:
+        # Return the highest bid amount
+        return JsonResponse({"highest_bid": highest_bid['BidAmount__max']}, status=status.HTTP_200_OK)
+    else:
+        # If there are no bids, return the StartPrice of the whisky
+        return JsonResponse({"start_price": whisky.StartPrice}, status=status.HTTP_200_OK)

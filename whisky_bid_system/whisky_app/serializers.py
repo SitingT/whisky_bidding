@@ -1,11 +1,17 @@
 from rest_framework import serializers
 from .models import User
-from .models import WhiskyDetail
+from .models import WhiskyDetail, Bid
 
 
 class WhiskyDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = WhiskyDetail
+        fields = '__all__'
+
+
+class BidSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Bid
         fields = '__all__'
 
 
