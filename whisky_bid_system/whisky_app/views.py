@@ -13,7 +13,7 @@ from .models import WhiskyDetail, Bid
 from .serializers import WhiskyDetailSerializer, BidSerializer
 from datetime import datetime
 from dateutil.parser import parse as parse_datetime
-from django.db.models import Q, Max
+from django.db.models import Q, Max, F, Case, When, Value, CharField, DecimalField
 
 
 class UserCreate(APIView):
@@ -48,6 +48,22 @@ def whisky_create(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@api_view(['POST'])
+def create_bid(request):
+    data = request.data.copy()  # Make a mutable copy
+
+    data['BidTime'] = timezone.now().isoformat()
+
+    serializer = BidSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+#############################
+
+
 @api_view(['GET'])
 def active_whisky_list(request):
     # Normalize the 'category' parameter to handle different capitalizations
@@ -61,6 +77,13 @@ def active_whisky_list(request):
 
     # Initialize the query with all objects, filtering out only those with EndTime greater than now
     query = WhiskyDetail.objects.filter(AuctionStatus='Active')
+    query = query.annotate(
+        current_bid=Case(
+            When(HighestBid__isnull=True, then=F('StartPrice')),
+            default=F('HighestBid'),
+            output_field=DecimalField(),
+        )
+    )
 
     # Update the AuctionStatus based on EndTime;
     for whisky in query:

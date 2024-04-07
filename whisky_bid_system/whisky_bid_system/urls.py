@@ -25,4 +25,5 @@ urlpatterns = [
     path('whisky/active/', views.active_whisky_list, name='active_whisky_list'),
     path('whisky/<int:item_id>/highest_bid/',
          views.whisky_highest_bid, name='whisky_highest_bid'),
+    path('bid/create/', views.create_bid, name='create-bid'),
 ]

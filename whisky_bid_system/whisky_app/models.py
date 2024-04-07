@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 
+
 # # UserManager for custom user management functionalities
 
 
@@ -29,6 +30,8 @@ class WhiskyDetail(models.Model):
         max_digits=10, decimal_places=2, db_column='StartPrice')
     BuyNowPrice = models.DecimalField(
         max_digits=10, decimal_places=2, db_column='BuyNowPrice')
+    HighestBid = models.DecimalField(
+        max_digits=10, decimal_places=2, db_column='HighestBid', null=True)
     Description = models.TextField(db_column='Description')
     AuctionStatus = models.CharField(max_length=10, choices=[
         ('Active', 'Active'), ('Inactive', 'Inactive'), ('Canceled', 'Canceled')], db_column='AuctionStatus')
