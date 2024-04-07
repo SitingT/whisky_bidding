@@ -142,6 +142,15 @@ def customer_bids_win_lose_status(request, customer_id):
     bids = Bid.objects.filter(BidderID=customer_id).select_related('ItemID')
     bid_status_query = request.query_params.get('status')
     results = []
+    won_items = set()
+
+    # First pass to identify won items
+    for bid in bids:
+        whisky = bid.ItemID
+        if whisky.EndTime < timezone.now() and whisky.HighestBid == bid.BidAmount:
+            won_items.add(whisky.ItemID)
+
+    # Second pass to build the response, considering won items
     for bid in bids:
         whisky = bid.ItemID
 
@@ -151,14 +160,14 @@ def customer_bids_win_lose_status(request, customer_id):
             whisky.AuctionStatus = 'Inactive'
             whisky.save()
 
-        if auction_status == 'Inactive':
-            # Check if this bid is the winning bid
-            if whisky.HighestBid == bid.BidAmount:
+            if whisky.ItemID in won_items and bid.BidAmount != whisky.HighestBid:
+                # Skip losing bids on items the customer has won
+                continue
+            elif whisky.HighestBid == bid.BidAmount:
                 bid_status = 'Win'
             else:
                 bid_status = 'Lose'
         else:
-            # If the auction is still active, we cannot determine win/lose status yet
             bid_status = 'Pending'
 
         if bid_status_query and bid_status_query.lower() != bid_status.lower():
