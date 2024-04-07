@@ -134,3 +134,40 @@ def whisky_highest_bid(request, item_id):
     else:
         # If there are no bids, return the StartPrice of the whisky
         return JsonResponse({"start_price": whisky.StartPrice}, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+def customer_bids_win_lose_status(request, customer_id):
+    # Fetch all bids made by the customer
+    bids = Bid.objects.filter(BidderID=customer_id).select_related('ItemID')
+    bid_status_query = request.query_params.get('status')
+    results = []
+    for bid in bids:
+        whisky = bid.ItemID
+
+        # Determine if the auction is active or not
+        auction_status = 'Active' if whisky.EndTime >= timezone.now() else 'Inactive'
+
+        if auction_status == 'Inactive':
+            # Check if this bid is the winning bid
+            if whisky.HighestBid == bid.BidAmount:
+                bid_status = 'Win'
+            else:
+                bid_status = 'Lose'
+        else:
+            # If the auction is still active, we cannot determine win/lose status yet
+            bid_status = 'Pending'
+
+        if bid_status_query and bid_status_query.lower() != bid_status.lower():
+            continue
+
+        results.append({
+            'BidID': bid.BidID,
+            'ItemID': whisky.ItemID,
+            'BidAmount': bid.BidAmount,
+            'BidTime': bid.BidTime,
+            'AuctionStatus': auction_status,
+            'BidStatus': bid_status
+        })
+
+    return Response(results, status=status.HTTP_200_OK)
