@@ -8,9 +8,7 @@ import Cart from "./Pages/Cart";
 import SellItem from "./Pages/SellItem";
 // import Shop from './Components/Pages/Shop';
 import Footer from "./Components/Footer/Footer";
-import Popular from "./Components/Popular/Popular";
-import NewsLetter from "./Components/NewsLetter/NewsLetter";
-import WhiskyForm from "./Components/WhiskyForm/WhiskyForm";
+
 function App() {
   return (
     <div>
