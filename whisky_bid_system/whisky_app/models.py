@@ -44,3 +44,17 @@ class WhiskyDetail(models.Model):
 
     class Meta:
         db_table = 'WhiskyDetails'
+
+
+class Bid(models.Model):
+    BidID = models.AutoField(primary_key=True)
+    ItemID = models.ForeignKey(
+        'WhiskyDetail', on_delete=models.CASCADE, db_column='ItemID')
+    BidderID = models.ForeignKey(
+        'User', on_delete=models.CASCADE, db_column='BidderID')
+    BidAmount = models.DecimalField(
+        max_digits=10, decimal_places=2, db_column='BidAmount')
+    BidTime = models.DateTimeField(db_column='BidTime')
+
+    class Meta:
+        db_table = 'Bids'

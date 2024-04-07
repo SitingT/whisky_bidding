@@ -39,7 +39,7 @@ CREATE TABLE WhiskyDetails (
 );
 
 CREATE TABLE Bids (
-    BidID int PRIMARY KEY,
+    BidID int AUTO_INCREMENT PRIMARY KEY,
     ItemID int,
     BidderID int,
     BidAmount decimal(10, 2),
@@ -50,7 +50,7 @@ CREATE TABLE Bids (
 
 -- Then create the Transactions table
 CREATE TABLE Transactions (
-    TransactionID int PRIMARY KEY,
+    TransactionID int AUTO_INCREMENT PRIMARY KEY,
     ItemID int,
     BuyerID int,
     SellerID int,
@@ -68,7 +68,7 @@ CREATE TABLE Transactions (
 
 
 CREATE TABLE Reviews (
-    ReviewID int PRIMARY KEY,
+    ReviewID int AUTO_INCREMENT PRIMARY KEY,
     ReviewerID int,
     RevieweeID int,
     ItemID int,
@@ -82,7 +82,7 @@ CREATE TABLE Reviews (
 );
 
 CREATE TABLE Messages (
-    MessageID int PRIMARY KEY,
+    MessageID int AUTO_INCREMENT PRIMARY KEY,
     SenderID int,
     ReceiverID int,
     Content text,
@@ -95,7 +95,7 @@ CREATE TABLE Messages (
 );
 
 CREATE TABLE ForumPosts (
-    PostID int PRIMARY KEY,
+    PostID int AUTO_INCREMENT PRIMARY KEY,
     AuthorID int,
     Content text,
     PostTime datetime,
@@ -104,7 +104,7 @@ CREATE TABLE ForumPosts (
 );
 
 CREATE TABLE Reports (
-    ReportID int PRIMARY KEY,
+    ReportID int AUTO_INCREMENT PRIMARY KEY,
     CreatorID int,
     ReportedUserID int,
     ReportType varchar(255),
@@ -115,7 +115,7 @@ CREATE TABLE Reports (
 );
 
 CREATE TABLE Recommendations (
-    RecommendationID int PRIMARY KEY,
+    RecommendationID int AUTO_INCREMENT PRIMARY KEY,
     UserID int,
     RecommendedItemID int,
     CreatedDateTime datetime,
