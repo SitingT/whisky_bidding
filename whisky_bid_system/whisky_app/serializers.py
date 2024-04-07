@@ -4,7 +4,7 @@ from .models import WhiskyDetail, Bid
 
 
 class WhiskyDetailSerializer(serializers.ModelSerializer):
-    current_bid = serializers.DecimalField(
+    Current_bid = serializers.DecimalField(
         max_digits=10, decimal_places=2, read_only=True)
 
     class Meta:

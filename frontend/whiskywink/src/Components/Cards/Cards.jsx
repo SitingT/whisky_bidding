@@ -78,7 +78,7 @@ const WhiskyCard = ({ whisky, image }) => (
           left: "5px",
         }}
       >
-        Bid Now: ${whisky.StartPrice}
+        Bid Now: ${whisky.current_bid}
       </Button>
 
       <div style={{ position: "absolute", right: "5px" }}>

@@ -50,13 +50,22 @@ def whisky_create(request):
 
 @api_view(['POST'])
 def create_bid(request):
-    data = request.data.copy()  # Make a mutable copy
-
+    data = request.data.copy()
     data['BidTime'] = timezone.now().isoformat()
 
     serializer = BidSerializer(data=data)
     if serializer.is_valid():
-        serializer.save()
+        new_bid = serializer.save()
+
+        # Fetch the associated whisky item using the ItemID from the bid
+        whisky_item = WhiskyDetail.objects.get(
+            ItemID=new_bid.ItemID.ItemID)  # Adjusted to use FK relation
+
+        # If this bid is higher than the current highest bid, update the whisky detail
+        if whisky_item.HighestBid is None or new_bid.BidAmount > whisky_item.HighestBid:
+            whisky_item.HighestBid = new_bid.BidAmount
+            whisky_item.save()
+
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -78,7 +87,7 @@ def active_whisky_list(request):
     # Initialize the query with all objects, filtering out only those with EndTime greater than now
     query = WhiskyDetail.objects.filter(AuctionStatus='Active')
     query = query.annotate(
-        current_bid=Case(
+        Current_bid=Case(
             When(HighestBid__isnull=True, then=F('StartPrice')),
             default=F('HighestBid'),
             output_field=DecimalField(),
