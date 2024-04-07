@@ -69,12 +69,16 @@ const NavBar = () => {
         <Link to="/login">
           <button>Login</button>
         </Link>
+        <Link to="/MyBid">
+          <button> Bid History </button>
+        </Link>
         <Link to="/Sell">
           <button> Sell </button>
         </Link>
         <Link to="/cart">
           <img src={cart_icon} alt="" />
         </Link>
+
         <div className="nav-cart-count">0</div>
       </div>
     </div>
