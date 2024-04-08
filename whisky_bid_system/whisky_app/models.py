@@ -29,8 +29,8 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    userid = models.AutoField(primary_key=True, db_column='UserID')
-    username = models.CharField(
+    id = models.AutoField(primary_key=True, db_column='UserID')
+    name = models.CharField(
         max_length=255, unique=True, db_column='Username')
     first_name = models.CharField(
         max_length=255, null=True, blank=True, db_column='FirstName')
@@ -49,7 +49,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    REQUIRED_FIELDS = ['name']
 
     class Meta:
         db_table = 'Users'
