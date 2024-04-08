@@ -1,16 +1,18 @@
 import React, { useState } from "react";
-
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import InputLabel from "@mui/material/InputLabel";
+import { Box, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import BidHistory from "../Components/BidHistory/BidHistory";
 const MyBid = () => {
-  const [status, setStatus] = useState("pending"); // default status
-
+  const [status, setStatus] = useState("pending");
   return (
-    <div>
-      <FormControl fullWidth>
+    <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      justifyContent="center"
+    >
+      {" "}
+      {/* Adjust height as needed */}
+      <FormControl sx={{ width: "60%" }}>
         <InputLabel id="status-select-label">Bid Status</InputLabel>
         <Select
           labelId="status-select-label"
@@ -24,8 +26,8 @@ const MyBid = () => {
           <MenuItem value="win">Win</MenuItem>
         </Select>
       </FormControl>
-      <BidHistory customerID={2} status={status} />
-    </div>
+      <BidHistory customerID={1} status={status} />
+    </Box>
   );
 };
 

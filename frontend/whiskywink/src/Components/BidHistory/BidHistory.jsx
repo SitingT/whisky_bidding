@@ -12,6 +12,7 @@ import {
   ListItemAvatar,
   Avatar,
 } from "@mui/material";
+import moment from "moment";
 
 // Dummy image paths, replace these with your actual import paths
 import ScotchImage from "../Assets/product_1.png";
@@ -37,11 +38,12 @@ const BidHistory = ({ customerID, status }) => {
       })
       .then((data) => {
         setBids(data);
+        console.log("Fetched data:", data);
       })
       .catch((error) => {
         setError(error.toString());
       });
-  }, [customerID, status]);
+  }, [customerID, status, url]);
 
   const getCategoryImage = (category) => {
     switch (category) {
@@ -57,6 +59,19 @@ const BidHistory = ({ customerID, status }) => {
         return ""; // Default image or leave as blank
     }
   };
+  function formatTimestamp(timestamp) {
+    const options = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      timeZoneName: "short",
+    };
+    const date = new Date(timestamp);
+    return date.toLocaleDateString(undefined, options);
+  }
 
   return (
     <Container maxWidth="sm">
@@ -77,7 +92,7 @@ const BidHistory = ({ customerID, status }) => {
                       />
                     </ListItemAvatar>
                     <ListItemText
-                      primary={`Item ID: ${bid.ItemID}, Bid: $${bid.BidAmount}`}
+                      primary={`Item ID: ${bid.ItemID}, Bid: $${bid.BidAmount},`}
                       secondary={
                         <>
                           <Typography
@@ -87,8 +102,16 @@ const BidHistory = ({ customerID, status }) => {
                           >
                             {`Auction Status: ${bid.AuctionStatus}, Bid Status: ${bid.BidStatus}`}
                           </Typography>
-                          —{" "}
-                          {`Bid Time: ${bid.BidTime}, Category: ${bid.Category}, End Time: ${bid.EndTime}`}
+                          <br />
+                          <Typography
+                            component="span"
+                            variant="body2"
+                            color="text.primary"
+                          >
+                            {`Bid Time: ${moment(bid.BidTime).format(
+                              "LLLL"
+                            )} End Time: ${moment(bid.EndTime).format("LLLL")}`}
+                          </Typography>
                         </>
                       }
                     />

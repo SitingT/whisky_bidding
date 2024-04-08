@@ -47,8 +47,8 @@ function WhiskyForm() {
       dataToSend.EndTime += ":00Z";
     }
 
-    console.log("Data preparation timestamp:", new Date().toISOString());
-    console.log("Data being sent:", JSON.stringify(dataToSend, null, 2));
+    // console.log("Data preparation timestamp:", new Date().toISOString());
+    // console.log("Data being sent:", JSON.stringify(dataToSend, null, 2));
 
     fetch("http://localhost:8000/whisky/create/", {
       method: "POST",
