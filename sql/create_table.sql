@@ -1,14 +1,19 @@
 CREATE TABLE Users (
     UserID int AUTO_INCREMENT PRIMARY KEY,
-    Username varchar(255),
+    Username varchar(255) UNIQUE,
     Email varchar(255) UNIQUE,
     Password varchar(255),
-    UserType ENUM('Admin', 'Normal'),
+    FirstName varchar(255),
+    LastName varchar(255),
+    IsStaff boolean,
+    IsSuperuser boolean,
+    IsBlocked boolean,
+    IsActive boolean,
     RegistrationDate datetime,
     LastLoginDate datetime,
-    IsBlocked boolean,
-	OverallRating decimal(3, 2)
+    OverallRating decimal(3, 2)
 );
+
 
 -- PaymentMethods Table (needs to exist before Transactions)
 CREATE TABLE PaymentMethods (

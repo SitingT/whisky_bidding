@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from .models import User
 from .models import WhiskyDetail, Bid
+from django.contrib.auth import get_user_model
+from rest_framework import serializers
 
 
 class BidSerializer(serializers.Serializer):
@@ -27,21 +29,42 @@ class BidSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class UserSerializer(serializers.ModelSerializer):
+# class UserSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = User
+#         fields = ['UserID', 'Username', 'Email', 'Password', 'UserType',
+#                   'RegistrationDate', 'LastLoginDate', 'IsBlocked', 'OverallRating']
+#         extra_kwargs = {'Password': {'write_only': True}}
+
+#     def create(self, validated_data):
+#         user = User.objects.create(
+#             Username=validated_data['Username'],
+#             Email=validated_data['Email'],
+#             # Consider using set_password here for hashing
+#             Password=validated_data['Password'],
+#             UserType=validated_data.get('UserType', 'Normal'),
+#             RegistrationDate=validated_data['RegistrationDate'],
+#         )
+#         user.save()
+#         return user
+
+
+# User = get_user_model()
+
+
+class UserCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['UserID', 'Username', 'Email', 'Password', 'UserType',
-                  'RegistrationDate', 'LastLoginDate', 'IsBlocked', 'OverallRating']
-        extra_kwargs = {'Password': {'write_only': True}}
+        fields = ('email', 'username', 'password',
+                  'user_type', 'overall_rating')
+        extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
-        user = User.objects.create(
-            Username=validated_data['Username'],
-            Email=validated_data['Email'],
-            # Consider using set_password here for hashing
-            Password=validated_data['Password'],
-            UserType=validated_data.get('UserType', 'Normal'),
-            RegistrationDate=validated_data['RegistrationDate'],
+        user = User.objects.create_user(
+            email=validated_data['email'],
+            username=validated_data['username'],
+            password=validated_data['password'],
+            user_type=validated_data.get('user_type', 'Normal'),
+            overall_rating=validated_data.get('overall_rating')
         )
-        user.save()
         return user
