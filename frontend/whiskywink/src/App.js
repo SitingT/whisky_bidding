@@ -5,10 +5,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import LoginSignup from './Pages/LoginSignup';
 import Product from './Pages/Product'; 
 import Cart from './Pages/Cart'; 
-// import Shop from './Components/Pages/Shop'; 
-import Footer from './Components/Footer/Footer'; 
-// import Popular from './Components/Popular/Popular';
-// import NewsLetter from './Components/NewsLetter/NewsLetter';
+import Footer from './Components/Footer/Footer';  
+
 
 function App() {
   return (
