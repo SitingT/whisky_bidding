@@ -46,7 +46,9 @@
 }
 
 .nav-login-cart button {
-  width: 120px;
+  /* width: 120px; */
+  padding: 10px 30px;
+  width: auto;
   height: 58px;
   outline: none;
   border: 1px solid #7a7a7a;

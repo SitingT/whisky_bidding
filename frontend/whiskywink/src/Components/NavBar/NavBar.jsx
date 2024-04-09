@@ -82,7 +82,7 @@ const NavBar = () => {
           <button onClick={handleLogout}>Log Out</button>
         ) : (
           <Link to="/login">
-            <button>Login</button>
+            <button>Signup/Login</button>
           </Link>
         )}
         <Link to="/MyBid">
