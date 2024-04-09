@@ -4,23 +4,23 @@ import { TextField, Button, Box } from "@mui/material";
 
 const CreateBidForm = ({ itemID, closeDialog }) => {
   const [bidData, setBidData] = useState({
-    BidderID: "1",
     ItemID: itemID, // Using prop value or empty string if not provided
     BidAmount: "1000",
   });
-  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setBidData({ ...bidData, [name]: value });
   };
 
+  const accessToken = sessionStorage.getItem("accessToken");
   const handleSubmit = (e) => {
     e.preventDefault();
     fetch("http://localhost:8000/bid/create/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify(bidData),
     })

@@ -26,7 +26,7 @@ const MyBid = () => {
           <MenuItem value="win">Win</MenuItem>
         </Select>
       </FormControl>
-      <BidHistory customerID={1} status={status} />
+      <BidHistory status={status} />
     </Box>
   );
 };

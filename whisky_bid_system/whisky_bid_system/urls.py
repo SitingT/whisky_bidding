@@ -26,7 +26,7 @@ urlpatterns = [
     path('whisky/<int:item_id>/highest_bid/',
          views.whisky_highest_bid, name='whisky_highest_bid'),
     path('bid/create/', views.create_bid, name='create-bid'),
-    path('customer/<int:customer_id>/bids_status/',
+    path('customer/bids_status/',
          views.customer_bids_win_lose_status, name='customer_bids_status'),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),

@@ -63,22 +63,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         # Assuming short name is the first name
         return self.first_name or self.username
 
-# class User(models.Model):
-#     UserID = models.AutoField(primary_key=True)
-#     Username = models.CharField(max_length=255)
-#     Email = models.EmailField(unique=True)
-#     Password = models.CharField(max_length=255)
-#     UserType = models.CharField(max_length=10, choices=[
-#         ('Admin', 'Admin'), ('Normal', 'Normal')])
-#     RegistrationDate = models.DateTimeField()
-#     LastLoginDate = models.DateTimeField(null=True, blank=True)
-#     IsBlocked = models.BooleanField(default=False)
-#     OverallRating = models.DecimalField(
-#         max_digits=3, decimal_places=2, null=True, blank=True)
-
-#     class Meta:
-#         db_table = 'Users'
-
 
 class WhiskyDetail(models.Model):
     ItemID = models.AutoField(primary_key=True, db_column='ItemID')

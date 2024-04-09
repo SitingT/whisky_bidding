@@ -24,12 +24,16 @@ const BidHistory = ({ customerID, status }) => {
   const [bids, setBids] = useState([]);
   const [error, setError] = useState(null);
   const baseUrl = "http://localhost:8000/customer/";
-  const url = `${baseUrl}${customerID}/bids_status/${
-    status ? `?status=${status}` : ""
-  }`;
+  const url = `${baseUrl}bids_status/${status ? `?status=${status}` : ""}`;
 
+  const accessToken = sessionStorage.getItem("accessToken");
   useEffect(() => {
-    fetch(url)
+    fetch(url, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
       .then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);

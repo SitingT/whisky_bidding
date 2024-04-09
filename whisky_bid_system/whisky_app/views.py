@@ -47,7 +47,7 @@ def whisky_create(request):
 def create_bid(request):
     data = request.data.copy()
     data['BidTime'] = timezone.now().isoformat()
-
+    data['BidderID'] = request.user.pk
     serializer = BidSerializer(data=data)
     if serializer.is_valid():
         new_bid = serializer.save()
@@ -135,8 +135,9 @@ def whisky_highest_bid(request, item_id):
 
 @api_view(['GET'])
 @permission_classes([PostOnlyAuthenticated])
-def customer_bids_win_lose_status(request, customer_id):
+def customer_bids_win_lose_status(request):
     # Fetch all bids made by the customer
+    customer_id = request.user.pk
     bids = Bid.objects.filter(BidderID=customer_id).select_related('ItemID')
     bid_status_query = request.query_params.get('status')
     results = []

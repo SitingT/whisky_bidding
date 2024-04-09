@@ -15,7 +15,6 @@ import { useNavigate } from "react-router-dom";
 function WhiskyForm() {
   // Initialize formState with StartTime set to now
   const [formState, setFormState] = useState({
-    SellerID: "1",
     StartPrice: "",
     BuyNowPrice: "",
     Description: "",
