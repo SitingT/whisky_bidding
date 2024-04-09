@@ -18,7 +18,7 @@ const LoginSignup = () => {
     event.preventDefault();
 
     const userData = {
-      username: name,
+      name: name,
       email: email,
       password: password,
     };
@@ -34,8 +34,8 @@ const LoginSignup = () => {
       .then((response) => response.json())
       .then((data) => {
         if (data.email) {
-          // Check for a field returned upon successful registration; adjust based on your API
-          console.log("Signup successful", data);
+          // console.log("Signup successful", data);
+          setErrorMessage("Signup successful");
           setIsLoginView(true); // Switch to login view on successful signup
         } else {
           setErrorMessage("Failed to sign up");
@@ -122,12 +122,16 @@ const LoginSignup = () => {
         {isLoginView ? (
           <p className="loginsignup-switch">
             Don't have an account?{" "}
-            <button onClick={() => setIsLoginView(false)}>Sign up here</button>
+            <button type="button" onClick={() => setIsLoginView(false)}>
+              Sign up here
+            </button>
           </p>
         ) : (
           <p className="loginsignup-switch">
             Already have an account?{" "}
-            <button onClick={() => setIsLoginView(true)}>Login here</button>
+            <button type="button" onClick={() => setIsLoginView(true)}>
+              Login here
+            </button>
           </p>
         )}
       </div>
