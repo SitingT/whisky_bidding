@@ -28,10 +28,10 @@ from django.db.models import Q, Max, F, Case, When, Value, CharField, DecimalFie
 
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def whisky_create(request):
     data = request.data.copy()  # Make a mutable copy
-    data['SellerID'] = request.user.pk
+    # data['SellerID'] = request.user.pk
     # Use dateutil's parse function, which can handle the 'Z' suffix.
     end_time_str = data.get('EndTime', '')
     if end_time_str:

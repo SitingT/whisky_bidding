@@ -2,27 +2,29 @@ import React, { useState } from "react";
 import "./LoginSignup.css";
 
 const LoginSignup = () => {
+  // States for signup
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  // States for login
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+  // Error message state
+  const [errorMessage, setErrorMessage] = useState("");
+  // Toggle state between login and signup view
+  const [isLoginView, setIsLoginView] = useState(false);
 
-  const handleSubmit = (event) => {
+  const handleSignup = (event) => {
     event.preventDefault();
 
-    // URL of your backend endpoint
-    const url = "http://localhost:8000/create_user/";
-
-    // Data to be sent to the backend
     const userData = {
-      Username: name,
-      Email: email,
-      Password: password,
-      UserType: "Normal", // Assuming a default UserType here; adjust as necessary
-      RegistrationDate: new Date().toISOString(), // Adjust if your backend expects a different format
+      username: name,
+      email: email,
+      password: password,
     };
 
-    // Making a POST request to the backend
-    fetch(url, {
+    fetch("http://localhost:8000/auth/users/", {
+      // Adjust this URL to your Django user creation endpoint
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -31,52 +33,103 @@ const LoginSignup = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("Success:", data);
-        // Process success response
+        if (data.email) {
+          // Check for a field returned upon successful registration; adjust based on your API
+          console.log("Signup successful", data);
+          setIsLoginView(true); // Switch to login view on successful signup
+        } else {
+          setErrorMessage("Failed to sign up");
+        }
       })
       .catch((error) => {
-        console.error("Error:", error);
-        // Handle errors here
+        console.error("Signup Error:", error);
+        setErrorMessage("An error occurred during sign up.");
+      });
+  };
+
+  const handleLogin = (event) => {
+    event.preventDefault();
+
+    const loginData = {
+      email: loginEmail,
+      password: loginPassword,
+    };
+
+    fetch("http://localhost:8000/auth/jwt/create/", {
+      // Adjust this URL to your login endpoint
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(loginData),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.access) {
+          // Assuming JWT returns an "access" token; adjust as necessary
+          sessionStorage.setItem("accessToken", data.access);
+          console.log("Login successful");
+          // Redirect or manage state as necessary
+        } else {
+          setErrorMessage("Failed to log in");
+        }
+      })
+      .catch((error) => {
+        console.error("Login Error:", error);
+        setErrorMessage("An error occurred during login.");
       });
   };
 
   return (
     <div className="loginsignup">
       <div className="loginsignup-container">
-        <h1>Sign Up</h1>
-        <form className="loginsignup-fields" onSubmit={handleSubmit}>
-          <input
-            type="text"
-            placeholder="Name"
-            name="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
+        <h1>{isLoginView ? "Login" : "Sign Up"}</h1>
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
+        <form
+          className="loginsignup-fields"
+          onSubmit={isLoginView ? handleLogin : handleSignup}
+        >
+          {!isLoginView && (
+            <input
+              type="text"
+              placeholder="Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          )}
           <input
             type="email"
             placeholder="Email Address"
-            name="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={isLoginView ? loginEmail : email}
+            onChange={(e) =>
+              isLoginView
+                ? setLoginEmail(e.target.value)
+                : setEmail(e.target.value)
+            }
           />
           <input
             type="password"
             placeholder="Password"
-            name="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={isLoginView ? loginPassword : password}
+            onChange={(e) =>
+              isLoginView
+                ? setLoginPassword(e.target.value)
+                : setPassword(e.target.value)
+            }
           />
-          <button type="submit">Continue</button>
+          <button type="submit">{isLoginView ? "Login" : "Continue"}</button>
         </form>
-        <p className="loginsignup-login">
-          Already have an account? <a href="/login">Login here</a>
-        </p>
-        <div className="loginsignup-agree">
-          <label>
-            <input type="checkbox" name="terms" id="terms" />
-            By continuing, I agree to the terms of use & privacy policy
-          </label>
-        </div>
+        {isLoginView ? (
+          <p className="loginsignup-switch">
+            Don't have an account?{" "}
+            <button onClick={() => setIsLoginView(false)}>Sign up here</button>
+          </p>
+        ) : (
+          <p className="loginsignup-switch">
+            Already have an account?{" "}
+            <button onClick={() => setIsLoginView(true)}>Login here</button>
+          </p>
+        )}
       </div>
     </div>
   );
