@@ -5,9 +5,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny
 # from .serializers import UserSerializer
-
+from .permissions import PostOnlyAuthenticated
 from datetime import datetime
 from django.utils import timezone
 from rest_framework.decorators import api_view
@@ -18,20 +18,11 @@ from dateutil.parser import parse as parse_datetime
 from django.db.models import Q, Max, F, Case, When, Value, CharField, DecimalField
 
 
-# class UserCreate(APIView):
-#     def post(self, request, format=None):
-#         serializer = UserSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()  # Password should be hashed appropriately
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
 @api_view(['POST'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([PostOnlyAuthenticated])
 def whisky_create(request):
     data = request.data.copy()  # Make a mutable copy
-    # data['SellerID'] = request.user.pk
+    data['SellerID'] = request.user.pk
     # Use dateutil's parse function, which can handle the 'Z' suffix.
     end_time_str = data.get('EndTime', '')
     if end_time_str:
@@ -52,6 +43,7 @@ def whisky_create(request):
 
 
 @api_view(['POST'])
+@permission_classes([PostOnlyAuthenticated])
 def create_bid(request):
     data = request.data.copy()
     data['BidTime'] = timezone.now().isoformat()
@@ -77,6 +69,7 @@ def create_bid(request):
 
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def active_whisky_list(request):
     # Normalize the 'category' parameter to handle different capitalizations
     category_query = request.query_params.get('category', None)
@@ -119,6 +112,7 @@ def active_whisky_list(request):
 
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def whisky_highest_bid(request, item_id):
     try:
         # Try to fetch the whisky detail by ItemID
@@ -140,6 +134,7 @@ def whisky_highest_bid(request, item_id):
 
 
 @api_view(['GET'])
+@permission_classes([PostOnlyAuthenticated])
 def customer_bids_win_lose_status(request, customer_id):
     # Fetch all bids made by the customer
     bids = Bid.objects.filter(BidderID=customer_id).select_related('ItemID')

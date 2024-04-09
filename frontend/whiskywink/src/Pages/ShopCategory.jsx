@@ -13,6 +13,8 @@ const ShopCategory = ({ category }) => {
   const baseUrl = "http://localhost:8000/whisky/active/";
   const url = category === "All" ? baseUrl : `${baseUrl}?category=${category}`;
   console.log("aaaa", url);
+
+  console.log();
   useEffect(() => {
     fetch(url)
       .then((response) => {

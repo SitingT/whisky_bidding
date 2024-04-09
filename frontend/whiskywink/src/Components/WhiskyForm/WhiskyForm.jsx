@@ -49,11 +49,12 @@ function WhiskyForm() {
 
     // console.log("Data preparation timestamp:", new Date().toISOString());
     // console.log("Data being sent:", JSON.stringify(dataToSend, null, 2));
-
+    const accessToken = sessionStorage.getItem("accessToken");
     fetch("http://localhost:8000/whisky/create/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify(dataToSend),
     })
