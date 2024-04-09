@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./LoginSignup.css";
+import { useNavigate } from "react-router-dom";
 
 const LoginSignup = () => {
   // States for signup
@@ -31,22 +32,34 @@ const LoginSignup = () => {
       },
       body: JSON.stringify(userData),
     })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.email) {
-          // console.log("Signup successful", data);
-          setErrorMessage("Signup successful");
-          setIsLoginView(true); // Switch to login view on successful signup
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
         } else {
-          setErrorMessage("Failed to sign up");
+          // If the response is not ok, try to parse the error message
+          return response.json().then((data) => {
+            throw data; // Throws an error with the API's response
+          });
         }
+      })
+      .then((data) => {
+        setErrorMessage("Signup successful");
+        // console.log("Signup successful", data);
+        setIsLoginView(true);
       })
       .catch((error) => {
         console.error("Signup Error:", error);
-        setErrorMessage("An error occurred during sign up.");
+        let errorMessage = "An error occurred during sign up.";
+        if (typeof error === "object" && error !== null) {
+          const errors = Object.values(error)
+            .map((e) => e.join(" "))
+            .join(" ");
+          if (errors) errorMessage = errors;
+        }
+        setErrorMessage(errorMessage);
       });
   };
-
+  const navigate = useNavigate();
   const handleLogin = (event) => {
     event.preventDefault();
 
@@ -56,7 +69,6 @@ const LoginSignup = () => {
     };
 
     fetch("http://localhost:8000/auth/jwt/create/", {
-      // Adjust this URL to your login endpoint
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -68,8 +80,8 @@ const LoginSignup = () => {
         if (data.access) {
           // Assuming JWT returns an "access" token; adjust as necessary
           sessionStorage.setItem("accessToken", data.access);
-          console.log("Login successful");
-          // Redirect or manage state as necessary
+          alert("Log in successfully!");
+          navigate("/");
         } else {
           setErrorMessage("Failed to log in");
         }
@@ -119,7 +131,11 @@ const LoginSignup = () => {
           />
           <button type="submit">{isLoginView ? "Login" : "Continue"}</button>
         </form>
-        {isLoginView ? (
+        <button type="button" onClick={() => setIsLoginView(!isLoginView)}>
+          {isLoginView ? "Sign up here" : "Login here"}
+        </button>
+
+        {/* {isLoginView ? (
           <p className="loginsignup-switch">
             Don't have an account?{" "}
             <button type="button" onClick={() => setIsLoginView(false)}>
@@ -129,11 +145,10 @@ const LoginSignup = () => {
         ) : (
           <p className="loginsignup-switch">
             Already have an account?{" "}
-            <button type="button" onClick={() => setIsLoginView(true)}>
-              Login here
-            </button>
+            <button type="button" onClick={() => setIsLoginView(true)}></button>
+            Login here
           </p>
-        )}
+        )} */}
       </div>
     </div>
   );

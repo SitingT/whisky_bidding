@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./NavBar.css";
 import logo from "../Assets/logo.png";
@@ -6,6 +6,18 @@ import cart_icon from "../Assets/cart_icon.png";
 
 const NavBar = () => {
   const [menu, setMenu] = useState("shop");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = sessionStorage.getItem("accessToken");
+    setIsLoggedIn(!!token);
+  }, []);
+
+  const handleLogout = () => {
+    sessionStorage.removeItem("accessToken");
+    alert("Log out successfully!");
+    setIsLoggedIn(false);
+  };
 
   return (
     <div className="navbar">
@@ -66,9 +78,13 @@ const NavBar = () => {
         </li>
       </ul>
       <div className="nav-login-cart">
-        <Link to="/login">
-          <button>Login</button>
-        </Link>
+        {isLoggedIn ? (
+          <button onClick={handleLogout}>Log Out</button>
+        ) : (
+          <Link to="/login">
+            <button>Login</button>
+          </Link>
+        )}
         <Link to="/MyBid">
           <button> Bid History </button>
         </Link>
