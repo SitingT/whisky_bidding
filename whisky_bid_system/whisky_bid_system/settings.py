@@ -103,9 +103,9 @@ WSGI_APPLICATION = 'whisky_bid_system.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'a',
+        'NAME': 'whisky',
         'USER': 'root',
-        'PASSWORD': 'abc123',
+        'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': '3306',
     }
