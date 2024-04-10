@@ -15,6 +15,7 @@ const LoginSignup = () => {
   // Toggle state between login and signup view
   const [isLoginView, setIsLoginView] = useState(false);
 
+
   const handleSignup = (event) => {
     event.preventDefault();
 
@@ -117,7 +118,7 @@ const LoginSignup = () => {
               isLoginView
                 ? setLoginEmail(e.target.value)
                 : setEmail(e.target.value)
-            }
+            }  
           />
           <input
             type="password"
@@ -128,6 +129,7 @@ const LoginSignup = () => {
                 ? setLoginPassword(e.target.value)
                 : setPassword(e.target.value)
             }
+            
           />
           <button type="submit">{isLoginView ? "Login" : "Continue"}</button>
         </form>

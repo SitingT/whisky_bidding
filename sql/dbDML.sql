@@ -111,4 +111,3 @@ INSERT INTO OfflinePayments (OfflinePaymentID, TransactionID, MethodID, Details,
 
 
 
-

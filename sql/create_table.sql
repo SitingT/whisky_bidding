@@ -258,4 +258,3 @@ GROUP BY
 
 ALTER TABLE WhiskyDetails ADD COLUMN HighestBid DECIMAL(10, 2);
 
-
