@@ -8,7 +8,7 @@ import Cart from "./Pages/Cart";
 import SellItem from "./Pages/SellItem";
 import MyBid from "./Pages/MyBid";
 import Footer from "./Components/Footer/Footer";
-
+import WhiskyReport from "./Pages/report";
 function App() {
   return (
     <div>
@@ -34,7 +34,7 @@ function App() {
           <Route path="/Sell" element={<SellItem />} />
           <Route path="/MyBid" element={<MyBid />} />
         </Routes>
-        {/* <WhiskyForm /> */}
+        <WhiskyReport />
 
         <Footer />
       </BrowserRouter>

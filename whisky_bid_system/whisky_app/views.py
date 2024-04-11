@@ -9,7 +9,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 # from .serializers import UserSerializer
-from .permissions import PostOnlyAuthenticated
+from .permissions import PostOnlyAuthenticated, IsAdminUser
 from datetime import datetime
 from django.utils import timezone
 from rest_framework.decorators import api_view
@@ -189,7 +189,7 @@ def customer_bids_win_lose_status(request):
 
 
 @api_view(['GET'])
-@permission_classes([AllowAny])
+@permission_classes([IsAdminUser])
 def whisky_report(request):
     # Count the number of active and inactive whiskies
     whisky_counts = WhiskyDetail.objects.values('AuctionStatus').annotate(
