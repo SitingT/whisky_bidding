@@ -88,6 +88,22 @@ const WhiskyReport = () => {
       <Card>
         <CardContent>
           <Typography variant="h6" component="h3">
+            Inactive User
+          </Typography>
+          <List>
+            {report.users_never_bidded.map((count, index) => (
+              <ListItem key={index}>
+                <ListItemText
+                  primary={`User ID : ${count.id}, Name: ${count.name}`}
+                />
+              </ListItem>
+            ))}
+          </List>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardContent>
+          <Typography variant="h6" component="h3">
             Most Popular Whisky
           </Typography>
           <Typography>

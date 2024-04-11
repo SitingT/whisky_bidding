@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.db.models import Count, Max
+from django.db.models import Subquery, OuterRef
 from django.db.models.functions import Coalesce
 # Create your views here.
 from rest_framework.views import APIView
@@ -223,8 +224,12 @@ def whisky_report(request):
     else:
         most_active_user_info = "No bids found."
 
+    users_with_bids = Bid.objects.values('BidderID').distinct()
+    users_never_bidded = User.objects.exclude(id__in=Subquery(users_with_bids)).exclude(
+        is_superuser=True).exclude(is_staff=True).values('id', 'name')
     return JsonResponse({
         'whisky_counts': list(whisky_counts),
         'most_popular_whisky': most_popular_whisky_info,
-        'most_active_user': most_active_user_info
+        'most_active_user': most_active_user_info,
+        'users_never_bidded': list(users_never_bidded)
     }, status=status.HTTP_200_OK)
