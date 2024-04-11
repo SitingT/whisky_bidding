@@ -11,6 +11,7 @@ import {
   Alert,
   ListItemAvatar,
   Avatar,
+  Button,
 } from "@mui/material";
 import moment from "moment";
 
@@ -64,6 +65,12 @@ const BidHistory = ({ customerID, status }) => {
     }
   };
 
+  const redirectToPayment = (bidID) => {
+    // Your redirection logic here
+    // For example, using React Router: history.push(`/payment/${bidID}`);
+    console.log("Redirect to payment page for Bid ID:", bidID);
+  };
+
   return (
     <Container maxWidth="sm">
       <Box sx={{ my: 6 }}>
@@ -106,6 +113,24 @@ const BidHistory = ({ customerID, status }) => {
                         </>
                       }
                     />
+                    {bid.BidStatus === "Win" && (
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => redirectToPayment(bid.BidID)}
+                        sx={{
+                          backgroundColor: "#D8BFD8",
+                          color: "black",
+                          marginLeft: "10px",
+                          marginTop: "10px",
+                          "&:hover": {
+                            backgroundColor: "#bea8be",
+                          },
+                        }}
+                      >
+                        Proceed to Payment
+                      </Button>
+                    )}
                   </ListItem>
                   {index < bids.length - 1 && (
                     <Divider variant="inset" component="li" />
