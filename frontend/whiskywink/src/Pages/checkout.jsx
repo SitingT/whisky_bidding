@@ -12,6 +12,7 @@ import {
   DialogContent,
   DialogActions,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 function TransactionForm() {
   const { ItemID, SellerID, Price } = useParams();
@@ -23,7 +24,7 @@ function TransactionForm() {
     trackingNumber: "",
   });
   const [open, setOpen] = useState(false);
-
+  const navigate = useNavigate();
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData((prev) => ({
@@ -68,7 +69,7 @@ function TransactionForm() {
       SellerID: SellerID,
       FinalPrice: Price,
       TransactionStatus: "Initiated",
-      PaymentStatus: "Pending",
+      PaymentStatus: "Completed",
       PaymentMethodID: {
         MethodName: formData.methodName,
         MethodType: formData.methodType,
@@ -95,6 +96,7 @@ function TransactionForm() {
       alert(
         `Transaction successful! Here is your shipping number: ${trackingNumber}`
       );
+      navigate("/");
     } else {
       const responseData = await response.json();
       alert(`Failed to create transaction: ${JSON.stringify(responseData)}`);
