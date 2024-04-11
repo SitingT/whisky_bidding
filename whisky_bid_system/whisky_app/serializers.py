@@ -50,10 +50,12 @@ class TransactionSerializer(serializers.ModelSerializer):
             payment_method = PaymentMethod.objects.get(
                 MethodID=payment_method_id)
         else:
-            payment_method = PaymentMethodSerializer.create(
-                PaymentMethodSerializer(), validated_data=payment_method_data)
-        transaction = Transaction.objects.create(
-            PaymentMethodID=payment_method, **validated_data)
+            payment_method_serializer = PaymentMethodSerializer(
+                data=payment_method_data)
+            if payment_method_serializer.is_valid(raise_exception=True):
+                payment_method = payment_method_serializer.save()
+            transaction = Transaction.objects.create(
+                PaymentMethodID=payment_method, **validated_data)
         return transaction
 
 
