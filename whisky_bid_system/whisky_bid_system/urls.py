@@ -30,4 +30,5 @@ urlpatterns = [
          views.customer_bids_win_lose_status, name='customer_bids_status'),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
+    path('whisky/report/', views.whisky_report, name='whisky_report'),
 ]

@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
+from django.db.models import Count, Max
+from django.db.models.functions import Coalesce
 # Create your views here.
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -11,7 +13,7 @@ from .permissions import PostOnlyAuthenticated
 from datetime import datetime
 from django.utils import timezone
 from rest_framework.decorators import api_view
-from .models import WhiskyDetail, Bid
+from .models import WhiskyDetail, Bid,  User
 from .serializers import WhiskyDetailSerializer, BidSerializer
 from datetime import datetime
 from dateutil.parser import parse as parse_datetime
@@ -184,3 +186,45 @@ def customer_bids_win_lose_status(request):
         })
 
     return Response(results, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def whisky_report(request):
+    # Count the number of active and inactive whiskies
+    whisky_counts = WhiskyDetail.objects.values('AuctionStatus').annotate(
+        total=Count('ItemID')).order_by('AuctionStatus')
+
+    # Find the most popular whisky (the one with the most bids)
+    most_popular_whisky = Bid.objects.values('ItemID').annotate(
+        total_bids=Count('BidID')).order_by('-total_bids').first()
+    if most_popular_whisky:
+        most_popular_whisky_detail = WhiskyDetail.objects.get(
+            ItemID=most_popular_whisky['ItemID'])
+        most_popular_whisky_info = {
+            'ItemID': most_popular_whisky_detail.ItemID,
+            'Description': most_popular_whisky_detail.Description,
+            'TotalBids': most_popular_whisky['total_bids']
+        }
+    else:
+        most_popular_whisky_info = "No bids found."
+
+    # Find the most active user (the user who has placed the most bids)
+    most_active_user = Bid.objects.values('BidderID').annotate(
+        total_bids=Count('BidID')).order_by('-total_bids').first()
+    if most_active_user:
+        most_active_user_detail = User.objects.get(
+            id=most_active_user['BidderID'])
+        most_active_user_info = {
+            'UserID': most_active_user_detail.id,
+            'Username': most_active_user_detail.name,
+            'TotalBids': most_active_user['total_bids']
+        }
+    else:
+        most_active_user_info = "No bids found."
+
+    return JsonResponse({
+        'whisky_counts': list(whisky_counts),
+        'most_popular_whisky': most_popular_whisky_info,
+        'most_active_user': most_active_user_info
+    }, status=status.HTTP_200_OK)
