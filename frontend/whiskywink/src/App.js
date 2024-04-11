@@ -4,7 +4,6 @@ import Navbar from "./Components/NavBar/NavBar";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginSignup from "./Pages/LoginSignup";
 import Product from "./Pages/Product";
-import Cart from "./Pages/Cart";
 import SellItem from "./Pages/SellItem";
 import MyBid from "./Pages/MyBid";
 import Footer from "./Components/Footer/Footer";
@@ -29,7 +28,6 @@ function App() {
           <Route path="/product" element={<Product />}>
             <Route path=":productId" element={<Product />} />
           </Route>
-          <Route path="/cart" element={<Cart />} />
           <Route path="/login" element={<LoginSignup />} />
           <Route path="/Sell" element={<SellItem />} />
           <Route path="/MyBid" element={<MyBid />} />

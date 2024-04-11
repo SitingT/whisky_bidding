@@ -14,7 +14,7 @@ import {
   DialogActions,
   Box,
 } from "@mui/material";
-import ImageButtonAsset from "../Assets/cart_icon.png"; // Your cart icon
+
 import DefaultImage from "../Assets/product_1.png"; // Default image if none is provided
 import CreateBidForm from "../CreateBidForm /CreateBidForm";
 const WhiskyCard = ({ whisky, image }) => {
@@ -83,31 +83,13 @@ const WhiskyCard = ({ whisky, image }) => {
             padding: "3px 6px",
             fontSize: "0.875rem",
             height: "32px",
-          }}
-        >
-          Buy Now: ${whisky.BuyNowPrice}
-        </Button>
-
-        <Button
-          variant="contained"
-          style={{
-            backgroundColor: "#D8BFD8",
-            color: "black",
-            padding: "3px 6px",
-            fontSize: "0.875rem",
-            height: "32px",
-            marginLeft: "5px", // Changed from left to marginLeft for spacing
+            width: "190px",
+            marginLeft: "80px",
           }}
           onClick={handleClickOpen} // Opens the Dialog on click
         >
           Bid Now: ${whisky.Current_bid}
         </Button>
-
-        <div style={{ position: "absolute", right: "5px" }}>
-          <IconButton aria-label="view image">
-            <img src={ImageButtonAsset} alt="View" />
-          </IconButton>
-        </div>
       </CardActions>
 
       {/* Dialog component for bidding */}
