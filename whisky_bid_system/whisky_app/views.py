@@ -188,7 +188,7 @@ def customer_bids_win_lose_status(request):
 
         if bid_status_query and bid_status_query.lower() != bid_status.lower():
             continue
-
+        seller_id = whisky.SellerID_id
         results.append({
             'BidID': bid.BidID,
             'ItemID': whisky.ItemID,
@@ -197,7 +197,8 @@ def customer_bids_win_lose_status(request):
             'BidAmount': bid.BidAmount,
             'BidTime': bid.BidTime,
             'AuctionStatus': auction_status,
-            'BidStatus': bid_status
+            'BidStatus': bid_status,
+            'SellerID': seller_id
         })
 
     return Response(results, status=status.HTTP_200_OK)

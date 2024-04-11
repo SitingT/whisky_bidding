@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   List,
   ListItem,
@@ -64,11 +65,11 @@ const BidHistory = ({ customerID, status }) => {
         return ""; // Default image or leave as blank
     }
   };
+  const navigate = useNavigate();
 
-  const redirectToPayment = (bidID) => {
-    // Your redirection logic here
-    // For example, using React Router: history.push(`/payment/${bidID}`);
-    console.log("Redirect to payment page for Bid ID:", bidID);
+  const redirectToPayment = (bid) => {
+    console.log("Navigating with bid:", bid);
+    navigate(`/checkout/${bid.ItemID}/${bid.SellerID}/ ${bid.BidAmount}`);
   };
 
   return (
@@ -117,7 +118,7 @@ const BidHistory = ({ customerID, status }) => {
                       <Button
                         variant="contained"
                         color="primary"
-                        onClick={() => redirectToPayment(bid.BidID)}
+                        onClick={() => redirectToPayment(bid)}
                         sx={{
                           backgroundColor: "#D8BFD8",
                           color: "black",

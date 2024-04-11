@@ -1,80 +1,46 @@
-import React, { useState, useEffect } from "react";
-import {
-  Button,
-  TextField,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-} from "@mui/material";
+import React, { useState } from "react";
+import { useParams } from "react-router-dom";
+import { Button, TextField } from "@mui/material";
 
-function CheckoutForm({ Price, ItemID, SellerID }) {
-  // State for storing input values
+function TransactionForm() {
+  const { ItemID, SellerID, Price } = useParams(); // Retrieving values from URL
+  console.log(ItemID, SellerID, Price);
+  // Initial state setup using useParams values
   const [formData, setFormData] = useState({
-    itemID: 2,
-    finalPrice: 170,
-    paymentMethodName: "",
-    paymentMethodType: "",
-    paymentMethodDescription: "",
-    paymentMethodStatus: true,
-    cardDetails: { cardName: "", expirationDate: "", csv: "" },
+    // itemID: ItemID,
+    // sellerID: SellerID,
+    // finalPrice: Price,
+    methodName: "",
+    methodType: "",
+    description: "",
+    status: true,
+    trackingNumber: "",
   });
 
-  // State for handling the dialog visibility
-  const [openDialog, setOpenDialog] = useState(false);
-
-  // Effect to autofill payment method name based on method type
-  useEffect(() => {
-    if (formData.paymentMethodType === "online") {
-      setFormData({ ...formData, paymentMethodName: "Card" });
-      setOpenDialog(true);
-    } else if (formData.paymentMethodType === "offline") {
-      setFormData({
-        ...formData,
-        paymentMethodName: "Check",
-        cardDetails: { cardName: "", expirationDate: "", csv: "" },
-      });
-      setOpenDialog(false);
-    }
-  }, [formData.paymentMethodType]);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({
+      ...formData,
       [name]: value,
-    }));
+    });
   };
 
-  const handleCardDetailsChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      cardDetails: { ...prevState.cardDetails, [name]: value },
-    }));
-  };
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    // Fixed test values
-    const testPayload = {
-      ItemID: 3,
-      //   BuyerID: 2,
-      SellerID: 3,
-      FinalPrice: 100.0,
+    const payload = {
+      ItemID: ItemID,
+      SellerID: SellerID,
+      FinalPrice: Price,
       TransactionStatus: "Initiated",
       PaymentStatus: "Pending",
       PaymentMethodID: {
-        MethodName: "Credit Card",
-        MethodType: "Online",
-        Description: "Visa Credit Card",
-        Status: true,
+        MethodName: formData.methodName,
+        MethodType: formData.methodType,
+        Description: formData.description,
+        Status: formData.status,
       },
-      UPSTrackingNumber: "1Z999AA10123456784",
+      UPSTrackingNumber: formData.trackingNumber,
     };
 
     const accessToken = sessionStorage.getItem("accessToken");
@@ -86,7 +52,7 @@ function CheckoutForm({ Price, ItemID, SellerID }) {
           "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,
         },
-        body: JSON.stringify(testPayload),
+        body: JSON.stringify(payload),
       }
     );
 
@@ -100,66 +66,43 @@ function CheckoutForm({ Price, ItemID, SellerID }) {
 
   return (
     <form onSubmit={handleSubmit}>
-      {/* <TextField
-        label="Payment Method Name"
-        variant="outlined"
-        name="paymentMethodName"
-        value={formData.paymentMethodName}
+      <TextField
+        label="Method Name"
+        name="methodName"
+        value={formData.methodName}
         onChange={handleInputChange}
         fullWidth
         margin="normal"
-        disabled
-      /> */}
-      {/* <TextField
-        label="Payment Method Description"
-        variant="outlined"
-        name="paymentMethodDescription"
-        value={formData.paymentMethodDescription}
+      />
+      <TextField
+        label="Method Type"
+        name="methodType"
+        value={formData.methodType}
         onChange={handleInputChange}
         fullWidth
         margin="normal"
-      /> */}
-      <Button type="submit" variant="contained">
+      />
+      <TextField
+        label="Description"
+        name="description"
+        value={formData.description}
+        onChange={handleInputChange}
+        fullWidth
+        margin="normal"
+      />
+      <TextField
+        label="Tracking Number"
+        name="trackingNumber"
+        value={formData.trackingNumber}
+        onChange={handleInputChange}
+        fullWidth
+        margin="normal"
+      />
+      <Button type="submit" variant="contained" color="primary" fullWidth>
         Submit Transaction
       </Button>
-      <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
-        <DialogTitle>Enter Card Details</DialogTitle>
-        <DialogContent>
-          <TextField
-            label="Card Name"
-            variant="outlined"
-            name="cardName"
-            value={formData.cardDetails.cardName}
-            onChange={handleCardDetailsChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Expiration Date"
-            variant="outlined"
-            name="expirationDate"
-            value={formData.cardDetails.expirationDate}
-            onChange={handleCardDetailsChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="CSV"
-            variant="outlined"
-            name="csv"
-            type="password"
-            value={formData.cardDetails.csv}
-            onChange={handleCardDetailsChange}
-            fullWidth
-            margin="normal"
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpenDialog(false)}>Close</Button>
-        </DialogActions>
-      </Dialog>
     </form>
   );
 }
 
-export default CheckoutForm;
+export default TransactionForm;
