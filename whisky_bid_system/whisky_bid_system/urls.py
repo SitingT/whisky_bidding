@@ -31,6 +31,7 @@ urlpatterns = [
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
     path('whisky/report/', views.whisky_report, name='whisky_report'),
-    path('whisky/sell/',  views.whisky_sell, name='whisky_sell')
-
+    path('whisky/sell/',  views.whisky_sell, name='whisky_sell'),
+    path('whisky/transaction/create/',
+         views.create_transaction, name='create_transaction'),
 ]

@@ -17,7 +17,7 @@ CREATE TABLE Users (
 
 -- PaymentMethods Table (needs to exist before Transactions)
 CREATE TABLE PaymentMethods (
-    MethodID int PRIMARY KEY,
+    MethodID int AUTO_INCREMENT PRIMARY KEY,
     MethodName varchar(255),
     MethodType ENUM('Online', 'Offline'),
     Description varchar(255),

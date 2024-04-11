@@ -32,6 +32,7 @@ function App() {
           <Route path="/Sell" element={<SellItem />} />
           <Route path="/MyBid" element={<MyBid />} />
           <Route path="/Report" element={<WhiskyReport />} />
+          <Route path="/CheckOut" element={<WhiskyReport />} />
         </Routes>
 
         <Footer />

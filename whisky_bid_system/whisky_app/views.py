@@ -15,7 +15,7 @@ from datetime import datetime
 from django.utils import timezone
 from rest_framework.decorators import api_view
 from .models import WhiskyDetail, Bid,  User
-from .serializers import WhiskyDetailSerializer, BidSerializer
+from .serializers import WhiskyDetailSerializer, BidSerializer, TransactionSerializer
 from datetime import datetime
 from dateutil.parser import parse as parse_datetime
 from django.db.models import Q, Max, F, Case, When, Value, CharField, DecimalField
@@ -68,6 +68,20 @@ def create_bid(request):
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+@api_view(['POST'])
+@permission_classes([PostOnlyAuthenticated])
+def create_transaction(request):
+    data = request.data.copy()
+    data['TransactionDate'] = timezone.now().isoformat()
+    data['BuyerID'] = request.user.pk
+
+    serializer = TransactionSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 #############################
 
 

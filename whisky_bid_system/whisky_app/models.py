@@ -103,3 +103,56 @@ class Bid(models.Model):
 
     class Meta:
         db_table = 'Bids'
+
+
+class PaymentMethod(models.Model):
+    METHOD_TYPE_CHOICES = [
+        ('Online', 'Online'),
+        ('Offline', 'Offline'),
+    ]
+
+    MethodID = models.AutoField(primary_key=True, db_column='MethodID')
+    MethodName = models.CharField(max_length=255, db_column='MethodName')
+    MethodType = models.CharField(
+        max_length=10, choices=METHOD_TYPE_CHOICES, db_column='MethodType')
+    Description = models.TextField(db_column='Description')
+    Status = models.BooleanField(db_column='Status')
+
+    class Meta:
+        db_table = 'PaymentMethods'
+
+
+class Transaction(models.Model):
+    TRANSACTION_STATUS_CHOICES = [
+        ('Initiated', 'Initiated'),
+        ('Completed', 'Completed'),
+        ('Cancelled', 'Cancelled'),
+    ]
+    PAYMENT_STATUS_CHOICES = [
+        ('Pending', 'Pending'),
+        ('Completed', 'Completed'),
+        ('Failed', 'Failed'),
+    ]
+
+    TransactionID = models.AutoField(
+        primary_key=True, db_column='TransactionID')
+    ItemID = models.ForeignKey(
+        'WhiskyDetail', on_delete=models.CASCADE, db_column='ItemID')
+    BuyerID = models.ForeignKey('User', on_delete=models.CASCADE,
+                                db_column='BuyerID', related_name='transactions_as_buyer')
+    SellerID = models.ForeignKey('User', on_delete=models.CASCADE,
+                                 db_column='SellerID', related_name='transactions_as_seller')
+    FinalPrice = models.DecimalField(
+        max_digits=10, decimal_places=2, db_column='FinalPrice')
+    TransactionStatus = models.CharField(
+        max_length=10, choices=TRANSACTION_STATUS_CHOICES, db_column='TransactionStatus')
+    PaymentStatus = models.CharField(
+        max_length=10, choices=PAYMENT_STATUS_CHOICES, db_column='PaymentStatus')
+    PaymentMethodID = models.ForeignKey(
+        'PaymentMethod', on_delete=models.CASCADE, db_column='PaymentMethodID')
+    UPSTrackingNumber = models.CharField(
+        max_length=255, db_column='UPSTrackingNumber', null=True, blank=True)
+    TransactionDate = models.DateTimeField(db_column='TransactionDate')
+
+    class Meta:
+        db_table = 'Transactions'

@@ -1,3 +1,4 @@
+from .models import Transaction, PaymentMethod
 from rest_framework import serializers
 from .models import User
 from .models import WhiskyDetail, Bid
@@ -29,27 +30,31 @@ class BidSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-# class UserSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = User
-#         fields = ['UserID', 'Username', 'Email', 'Password', 'UserType',
-#                   'RegistrationDate', 'LastLoginDate', 'IsBlocked', 'OverallRating']
-#         extra_kwargs = {'Password': {'write_only': True}}
-
-#     def create(self, validated_data):
-#         user = User.objects.create(
-#             Username=validated_data['Username'],
-#             Email=validated_data['Email'],
-#             # Consider using set_password here for hashing
-#             Password=validated_data['Password'],
-#             UserType=validated_data.get('UserType', 'Normal'),
-#             RegistrationDate=validated_data['RegistrationDate'],
-#         )
-#         user.save()
-#         return user
+class PaymentMethodSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PaymentMethod
+        fields = '__all__'
 
 
-# User = get_user_model()
+class TransactionSerializer(serializers.ModelSerializer):
+    PaymentMethodID = PaymentMethodSerializer()
+
+    class Meta:
+        model = Transaction
+        fields = '__all__'
+
+    def create(self, validated_data):
+        payment_method_data = validated_data.pop('PaymentMethodID')
+        payment_method_id = payment_method_data.get('MethodID', None)
+        if payment_method_id:
+            payment_method = PaymentMethod.objects.get(
+                MethodID=payment_method_id)
+        else:
+            payment_method = PaymentMethodSerializer.create(
+                PaymentMethodSerializer(), validated_data=payment_method_data)
+        transaction = Transaction.objects.create(
+            PaymentMethodID=payment_method, **validated_data)
+        return transaction
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
