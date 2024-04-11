@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import "./NavBar.css";
 import logo from "../Assets/logo.png";
 import cart_icon from "../Assets/cart_icon.png";
+import { useNavigate } from "react-router-dom";
 
 const NavBar = () => {
   const [menu, setMenu] = useState("shop");
@@ -13,9 +14,11 @@ const NavBar = () => {
     setIsLoggedIn(!!token);
   }, []);
 
+  const navigate = useNavigate();
   const handleLogout = () => {
     sessionStorage.removeItem("accessToken");
     alert("Log out successfully!");
+    navigate("/");
     setIsLoggedIn(false);
   };
 
