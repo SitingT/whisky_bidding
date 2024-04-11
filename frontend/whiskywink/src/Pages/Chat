@@ -1,0 +1,113 @@
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
+const ChatPage = () => {
+  const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState('');
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    // Fetch messages from the server
+    const fetchMessages = async () => {
+      try {
+        const response = await axios.get('/api/messages');
+        setMessages(response.data);
+      } catch (error) {
+        console.error('Error fetching messages:', error);
+      }
+    };
+
+    // Fetch user information (assuming user is logged in)
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get('/api/user');
+        setUser(response.data);
+      } catch (error) {
+        console.error('Error fetching user:', error);
+      }
+    };
+
+    fetchMessages();
+    fetchUser();
+  }, []);
+
+  const handleSendMessage = async () => {
+    try {
+      const response = await axios.post('/api/messages', {
+        content: newMessage,
+        sender: user.id,
+      });
+      setMessages([...messages, response.data]);
+      setNewMessage('');
+    } catch (error) {
+      console.error('Error sending message:', error);
+    }
+  };
+
+  const handleLeaveMessage = async () => {
+    try {
+      const response = await axios.post('/api/messages', {
+        content: newMessage,
+        sender: user.id,
+        isLeaveMessage: true,
+      });
+      setMessages([...messages, response.data]);
+      setNewMessage('');
+    } catch (error) {
+      console.error('Error leaving message:', error);
+    }
+  };
+
+  const handleReact = async (messageId, reaction) => {
+    try {
+      await axios.post(`/api/messages/${messageId}/react`, {
+        reaction,
+        userId: user.id,
+      });
+      // Update the messages state to reflect the reaction
+      const updatedMessages = messages.map((message) => {
+        if (message.id === messageId) {
+          return {
+            ...message,
+            reactions: [...message.reactions, { userId: user.id, reaction }],
+          };
+        }
+        return message;
+      });
+      setMessages(updatedMessages);
+    } catch (error) {
+      console.error('Error reacting to message:', error);
+    }
+  };
+
+  return (
+    <div className="chat-page">
+      <h2>Chat</h2>
+      <div className="message-list">
+        {messages.map((message) => (
+          <div key={message.id} className="message">
+            <p>{message.content}</p>
+            <div className="message-actions">
+              <button onClick={() => handleReact(message.id, 'thumbsUp')}>
+                👍
+              </button>
+              {/* Add more reaction options */}
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="message-input">
+        <input
+          type="text"
+          value={newMessage}
+          onChange={(e) => setNewMessage(e.target.value)}
+          placeholder="Type your message..."
+        />
+        <button onClick={handleSendMessage}>Send</button>
+        <button onClick={handleLeaveMessage}>Leave Message</button>
+      </div>
+    </div>
+  );
+};
+
+export default ChatPage;
