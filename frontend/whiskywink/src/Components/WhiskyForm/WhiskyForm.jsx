@@ -173,7 +173,19 @@ function WhiskyForm() {
           </Grid>
           {/* Other fields remain unchanged */}
           <Grid item xs={12}>
-            <Button type="submit" variant="contained" color="primary">
+            <Button
+              type="submit"
+              variant="contained"
+              sx={{
+                backgroundColor: "#D8BFD8",
+                color: "black",
+                marginLeft: "10px",
+                marginTop: "20px",
+                "&:hover": {
+                  backgroundColor: "#bea8be",
+                },
+              }}
+            >
               Submit
             </Button>
           </Grid>

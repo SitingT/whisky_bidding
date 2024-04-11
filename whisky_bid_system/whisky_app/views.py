@@ -233,3 +233,12 @@ def whisky_report(request):
         'most_active_user': most_active_user_info,
         'users_never_bidded': list(users_never_bidded)
     }, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([PostOnlyAuthenticated])
+def whisky_sell(request):
+    query = WhiskyDetail.objects.filter(SellerID=request.user)
+    response_data = query.values(
+        'ItemID', 'AuctionStatus', 'EndTime', 'Description', 'HighestBid')
+    return Response(list(response_data), status=status.HTTP_200_OK)

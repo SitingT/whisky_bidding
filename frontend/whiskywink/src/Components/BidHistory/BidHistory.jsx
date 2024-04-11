@@ -63,19 +63,6 @@ const BidHistory = ({ customerID, status }) => {
         return ""; // Default image or leave as blank
     }
   };
-  function formatTimestamp(timestamp) {
-    const options = {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      timeZoneName: "short",
-    };
-    const date = new Date(timestamp);
-    return date.toLocaleDateString(undefined, options);
-  }
 
   return (
     <Container maxWidth="sm">
