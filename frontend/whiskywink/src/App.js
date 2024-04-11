@@ -33,8 +33,8 @@ function App() {
           <Route path="/login" element={<LoginSignup />} />
           <Route path="/Sell" element={<SellItem />} />
           <Route path="/MyBid" element={<MyBid />} />
+          <Route path="/Report" element={<WhiskyReport />} />
         </Routes>
-        <WhiskyReport />
 
         <Footer />
       </BrowserRouter>

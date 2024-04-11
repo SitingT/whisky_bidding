@@ -78,6 +78,15 @@ const NavBar = () => {
         </li>
       </ul>
       <div className="nav-login-cart">
+        <Link to="/MyBid">
+          <button> Bid History </button>
+        </Link>
+        <Link to="/Sell">
+          <button> Sell </button>
+        </Link>
+        <Link to="/Report">
+          <button> Report for Admin </button>
+        </Link>
         {isLoggedIn ? (
           <button onClick={handleLogout}>Log Out</button>
         ) : (
@@ -85,12 +94,6 @@ const NavBar = () => {
             <button>Signup/Login</button>
           </Link>
         )}
-        <Link to="/MyBid">
-          <button> Bid History </button>
-        </Link>
-        <Link to="/Sell">
-          <button> Sell </button>
-        </Link>
         <Link to="/cart">
           <img src={cart_icon} alt="" />
         </Link>

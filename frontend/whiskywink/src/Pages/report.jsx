@@ -9,38 +9,40 @@ import {
   CardContent,
   Alert,
 } from "@mui/material";
-// Import your Auth context if you're using one
-// import { AuthContext } from './path/to/your/context/AuthContext';
 
 const WhiskyReport = () => {
   const [report, setReport] = useState(null);
   const [error, setError] = useState("");
-  // If using context to store your auth token
-  // const { authToken } = useContext(AuthContext);
 
   const accessToken = sessionStorage.getItem("accessToken");
+
   useEffect(() => {
     const fetchReport = async () => {
-      const response = await fetch("http://localhost:8000/whisky/report/", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      try {
+        const response = await fetch("http://localhost:8000/whisky/report/", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
 
-      if (response.status === 403) {
-        setError("Sorry, the report can only be viewed by the admin.");
-        return;
-      }
+        if (response.status === 403) {
+          setError("Sorry, the report can only be viewed by the admin.");
+          return;
+        }
 
-      if (!response.ok) {
+        if (!response.ok) {
+          setError("Failed to fetch the whisky report.");
+          console.error("Failed to fetch the whisky report.");
+          return;
+        }
+
+        const data = await response.json();
+        setReport(data);
+      } catch (error) {
         setError("Failed to fetch the whisky report.");
-        console.error("Failed to fetch the whisky report.");
-        return;
+        console.error("Failed to fetch the whisky report:", error);
       }
-
-      const data = await response.json();
-      setReport(data);
     };
 
     fetchReport();
@@ -69,9 +71,10 @@ const WhiskyReport = () => {
       <Typography variant="h4" component="h1" gutterBottom>
         Whisky Report
       </Typography>
+
       <Card>
         <CardContent>
-          <Typography variant="h6" component="h3">
+          <Typography variant="h5" component="h2" gutterBottom>
             Whisky Counts
           </Typography>
           <List>
@@ -85,25 +88,27 @@ const WhiskyReport = () => {
           </List>
         </CardContent>
       </Card>
+
       <Card>
         <CardContent>
-          <Typography variant="h6" component="h3">
-            Inactive User
+          <Typography variant="h5" component="h2" gutterBottom>
+            Inactive Users
           </Typography>
           <List>
-            {report.users_never_bidded.map((count, index) => (
+            {report.users_never_bidded.map((user, index) => (
               <ListItem key={index}>
                 <ListItemText
-                  primary={`User ID : ${count.id}, Name: ${count.name}`}
+                  primary={`User ID: ${user.id}, Name: ${user.name}`}
                 />
               </ListItem>
             ))}
           </List>
         </CardContent>
       </Card>
+
       <Card>
         <CardContent>
-          <Typography variant="h6" component="h3">
+          <Typography variant="h5" component="h2" gutterBottom>
             Most Popular Whisky
           </Typography>
           <Typography>
@@ -113,9 +118,10 @@ const WhiskyReport = () => {
           </Typography>
         </CardContent>
       </Card>
+
       <Card>
         <CardContent>
-          <Typography variant="h6" component="h3">
+          <Typography variant="h5" component="h2" gutterBottom>
             Most Active User
           </Typography>
           <Typography>
