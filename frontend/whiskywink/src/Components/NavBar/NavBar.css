@@ -42,12 +42,12 @@
 .nav-login-cart {
   display: flex;
   align-items: center;
-  gap: 45px;
+  gap: 25px;
 }
 
 .nav-login-cart button {
   /* width: 120px; */
-  padding: 10px 30px;
+  padding: 10px 20px;
   width: auto;
   height: 58px;
   outline: none;
