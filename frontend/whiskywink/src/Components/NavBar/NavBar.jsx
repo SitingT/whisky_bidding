@@ -82,7 +82,7 @@ const NavBar = () => {
       </ul>
       <div className="nav-login-cart">
         <Link to="/MyBid">
-          <button> Bid History </button>
+          <button> Bid </button>
         </Link>
         <Link to="/Sell">
           <button> Sell </button>
