@@ -14,7 +14,7 @@ from .permissions import PostOnlyAuthenticated, IsAdminUser
 from datetime import datetime
 from django.utils import timezone
 from rest_framework.decorators import api_view
-from .models import WhiskyDetail, Bid,  User
+from .models import WhiskyDetail, Bid,  User, Transaction
 from .serializers import WhiskyDetailSerializer, BidSerializer, TransactionSerializer
 from datetime import datetime
 from dateutil.parser import parse as parse_datetime
@@ -75,6 +75,9 @@ def create_transaction(request):
     data = request.data.copy()
     data['TransactionDate'] = timezone.now().isoformat()
     data['BuyerID'] = request.user.pk
+    item_id = request.data.get('ItemID')
+    if Transaction.objects.filter(ItemID=item_id, TransactionStatus__in=['Initiated', 'Completed']).exists():
+        return Response({'error': 'Item has already been purchased'}, status=status.HTTP_400_BAD_REQUEST)
 
     serializer = TransactionSerializer(data=data)
     if serializer.is_valid():
