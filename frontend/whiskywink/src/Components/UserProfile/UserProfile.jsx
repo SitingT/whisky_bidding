@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardContent, Typography } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  Typography,
+  CardMedia,
+  Container,
+} from "@mui/material";
+import profile_img from "../Assets/profile.png";
 
 function UserDetails() {
   const [user, setUser] = useState(null);
@@ -7,6 +14,11 @@ function UserDetails() {
 
   const accessToken = sessionStorage.getItem("accessToken");
   useEffect(() => {
+    if (!accessToken) {
+      setError("Please log in to see the profile.");
+      return;
+    }
+
     const fetchUserDetails = async () => {
       try {
         const response = await fetch(`http://localhost:8000//user/details/`, {
@@ -33,43 +45,68 @@ function UserDetails() {
     fetchUserDetails();
   }, [accessToken]);
 
+  if (!accessToken) {
+    return (
+      <Container maxWidth="sm" sx={{ marginTop: 4 }}>
+        <Typography variant="h6" align="center">
+          {error}
+        </Typography>
+      </Container>
+    );
+  }
+
   return (
-    <Card
-      sx={{
-        maxWidth: 345,
-        marginTop: 4,
-        marginLeft: "auto",
-        marginRight: "auto",
-      }}
-    >
-      <CardContent>
-        {error ? (
-          <Typography color="error">{error}</Typography>
-        ) : user ? (
-          <>
-            <Typography variant="h5" component="div">
-              {user.name}
+    <Container maxWidth="md" sx={{ marginTop: 4 }}>
+      <Card sx={{ maxWidth: 600, margin: "auto" }}>
+        <CardMedia
+          component="img"
+          height="300"
+          image={profile_img}
+          alt="Personal Image"
+          sx={{
+            width: "auto",
+            maxWidth: "100%",
+            objectFit: "contain",
+          }}
+        />
+        <CardContent>
+          {error ? (
+            <Typography color="error" align="center">
+              {error}
             </Typography>
-            <Typography color="text.secondary">Email: {user.email}</Typography>
-            <Typography color="text.secondary">
-              Staff: {user.is_staff ? "Yes" : "No"}
-            </Typography>
-            <Typography color="text.secondary">
-              Registration Date:{" "}
-              {new Date(user.registration_date).toLocaleDateString()}
-            </Typography>
-            <Typography color="text.secondary">Overall Rating</Typography>
-            {/* {user.overall_rating && (
-              <Typography color="text.secondary">
-                Overall Rating
+          ) : user ? (
+            <>
+              <Typography variant="h5" component="div" align="center">
+                {user.name}
               </Typography>
-            )} */}
-          </>
-        ) : (
-          <Typography component="div">Loading...</Typography>
-        )}
-      </CardContent>
-    </Card>
+              <Typography color="text.secondary" align="center">
+                Email: {user.email}
+              </Typography>
+              <Typography color="text.secondary" align="center">
+                Staff: {user.is_staff ? "Yes" : "No"}
+              </Typography>
+              <Typography color="text.secondary" align="center">
+                Registration Date:{" "}
+                {new Date(user.registration_date).toLocaleDateString()}
+              </Typography>
+              {user.overall_rating !== null ? (
+                <Typography color="text.secondary" align="center">
+                  Overall Rating: {user.overall_rating}
+                </Typography>
+              ) : (
+                <Typography color="text.secondary" align="center">
+                  No one gives you a rating yet.
+                </Typography>
+              )}
+            </>
+          ) : (
+            <Typography component="div" align="center">
+              Loading...
+            </Typography>
+          )}
+        </CardContent>
+      </Card>
+    </Container>
   );
 }
 
