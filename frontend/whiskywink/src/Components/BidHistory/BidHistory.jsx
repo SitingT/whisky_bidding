@@ -49,7 +49,7 @@ const BidHistory = ({ customerID, status }) => {
       .catch((error) => {
         setError(error.toString());
       });
-  }, [customerID, status, url]);
+  }, [accessToken]);
 
   const getCategoryImage = (category) => {
     switch (category) {

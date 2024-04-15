@@ -263,10 +263,10 @@ def whisky_sell(request):
 
 
 @api_view(['GET'])
-@permission_classes([AllowAny])
-def get_user_details(request, user_id):
+@permission_classes([PostOnlyAuthenticated])
+def get_user_details(request):
     try:
-        user = User.objects.get(id=user_id)
+        user = User.objects.get(id=request.user.pk)
         serializer = UserSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
     except User.DoesNotExist:

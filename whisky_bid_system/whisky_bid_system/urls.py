@@ -34,6 +34,5 @@ urlpatterns = [
     path('whisky/sell/',  views.whisky_sell, name='whisky_sell'),
     path('whisky/transaction/create/',
          views.create_transaction, name='create_transaction'),
-    path('api/user/details/<int:user_id>/',
-         views.get_user_details, name='user-details'),
+    path('/user/details/', views.get_user_details, name='user-details'),
 ]

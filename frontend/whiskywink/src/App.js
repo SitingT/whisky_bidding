@@ -9,6 +9,7 @@ import MyBid from "./Pages/MyBid";
 import Footer from "./Components/Footer/Footer";
 import WhiskyReport from "./Pages/report";
 import TransactionForm from "./Pages/checkout";
+import UserDetails from "./Components/UserProfile/UserProfile";
 function App() {
   return (
     <div>
@@ -38,7 +39,7 @@ function App() {
             element={<TransactionForm />}
           />
         </Routes>
-
+        <UserDetails />
         <Footer />
       </BrowserRouter>
     </div>
