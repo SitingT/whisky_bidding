@@ -59,19 +59,11 @@ class TransactionSerializer(serializers.ModelSerializer):
         return transaction
 
 
-class UserCreateSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
+    # Assuming 'overalling' needs a default
+    overalling = serializers.IntegerField(default=0)
+
     class Meta:
         model = User
-        fields = ('email', 'username', 'password',
-                  'user_type', 'overall_rating')
-        extra_kwargs = {'password': {'write_only': True}}
-
-    def create(self, validated_data):
-        user = User.objects.create_user(
-            email=validated_data['email'],
-            username=validated_data['username'],
-            password=validated_data['password'],
-            user_type=validated_data.get('user_type', 'Normal'),
-            overall_rating=validated_data.get('overall_rating')
-        )
-        return user
+        fields = ['name', 'email', 'is_staff',
+                  'registration_date', 'overalling']
