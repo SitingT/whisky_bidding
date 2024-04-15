@@ -60,10 +60,10 @@ class TransactionSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    # Assuming 'overalling' needs a default
-    overalling = serializers.IntegerField(default=0)
-
     class Meta:
         model = User
         fields = ['name', 'email', 'is_staff',
-                  'registration_date', 'overalling']
+                  'registration_date', 'overall_rating']
+        extra_kwargs = {
+            'overall_rating': {'required': False, 'allow_null': True}
+        }
