@@ -11,7 +11,7 @@ import WhiskyReport from "./Pages/report";
 import TransactionForm from "./Pages/checkout";
 import UserProfile from "./Pages/userProfile";
 import CreateReviewForm from "./Components/Review/CreateReviewForm";
-import ChatBox from "./Components/Chat/Chat.jsx";
+// import ChatBox from "./Components/Chat/Chat.jsx";
 
 function App() {
   return (
@@ -44,7 +44,7 @@ function App() {
           <Route path="/UserProfile" element={<UserProfile />} />
           <Route path="/create-review" element={<CreateReviewForm />} />
         </Routes>
-        <ChatBox chatWithUserID={2} />
+        {/* <ChatBox chatWithUserID={2} itemID={2} /> */}
         <Footer />
       </BrowserRouter>
     </div>

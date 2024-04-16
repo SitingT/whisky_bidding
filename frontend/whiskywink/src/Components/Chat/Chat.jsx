@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 
-function ChatBox({ chatWithUserID }) {
+function ChatBox({ chatWithUserID, itemID }) {
   // Now accepts chatWithUserID as a prop
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -41,7 +41,7 @@ function ChatBox({ chatWithUserID }) {
       Content: newMessage,
       SendTime: new Date().toISOString(),
       IsSensitive: false,
-      RelatedItemID: null,
+      RelatedItemID: itemID,
     };
 
     const response = await fetch("http://localhost:8000/chat/send-message/", {
