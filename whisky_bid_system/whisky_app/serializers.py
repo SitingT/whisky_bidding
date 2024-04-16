@@ -102,5 +102,4 @@ class CustomReviewSerializer(serializers.ModelSerializer):
 
     def get_ReviewerName(self, obj):
         # Assuming ReviewerID is a ForeignKey to User
-        reviewer = User.objects.get(id=obj.ReviewerID.id)
-        return reviewer.get_full_name()
+        return obj.ReviewerID.name
