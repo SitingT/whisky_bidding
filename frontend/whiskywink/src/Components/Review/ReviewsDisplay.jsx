@@ -1,7 +1,9 @@
 import React from "react";
 import { Box, Card, CardContent, Typography, Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const ReviewDisplay = ({ reviews, error, CanBeDelete }) => {
+  const navigate = useNavigate();
   const accessToken = sessionStorage.getItem("accessToken");
   const handleDelete = (reviewId) => {
     fetch(`http://localhost:8000/api/reviews/delete/${reviewId}/`, {
@@ -16,6 +18,7 @@ const ReviewDisplay = ({ reviews, error, CanBeDelete }) => {
       .then((data) => {
         console.log("Success:", data);
         alert("Review deleted successfully.");
+        navigate("/");
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -56,7 +59,13 @@ const ReviewDisplay = ({ reviews, error, CanBeDelete }) => {
                   color="error"
                   variant="contained"
                   onClick={() => handleDelete(review.ReviewID)}
-                  sx={{ mt: 2 }}
+                  sx={{
+                    backgroundColor: "#D8BFD8",
+                    color: "black",
+                    "&:hover": {
+                      backgroundColor: "#bea8be",
+                    },
+                  }}
                 >
                   Delete
                 </Button>
