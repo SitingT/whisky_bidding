@@ -90,7 +90,7 @@ class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
         fields = ['ReviewID', 'ReviewerID',
-                  'RevieweeID', 'ItemID', 'Rating', 'Comment']
+                  'RevieweeID', 'ItemID', 'Rating', 'Comment', 'CommentTime']
 
 
 class CustomReviewSerializer(serializers.ModelSerializer):

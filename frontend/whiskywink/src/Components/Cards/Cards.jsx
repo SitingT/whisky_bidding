@@ -99,7 +99,6 @@ const WhiskyCard = ({ whisky, image }) => {
           Bid Now: ${whisky.Current_bid}
         </Button>
         <Button
-          variant="outlined"
           style={{
             backgroundColor: "#D8BFD8",
             color: "black",
