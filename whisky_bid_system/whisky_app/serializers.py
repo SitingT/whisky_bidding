@@ -101,5 +101,17 @@ class CustomReviewSerializer(serializers.ModelSerializer):
         fields = ['Rating', 'Comment', 'ReviewerName']
 
     def get_ReviewerName(self, obj):
-        # Assuming ReviewerID is a ForeignKey to User
+
         return obj.ReviewerID.name
+
+
+class GetReviewSerializer(serializers.ModelSerializer):
+    RevieweeName = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Review
+        fields = ['ReviewID', 'Rating', 'Comment', 'ItemID', 'RevieweeName']
+
+    def get_RevieweeName(self, obj):
+
+        return obj.RevieweeID.name if obj.RevieweeID else None

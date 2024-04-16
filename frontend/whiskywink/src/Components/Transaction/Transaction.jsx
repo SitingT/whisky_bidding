@@ -87,6 +87,9 @@ const TransactionComponent = ({ role }) => {
                   <>
                     <Typography variant="h5">Whisky Details</Typography>
                     <Typography>
+                      ItemID: {transaction.item_details.ItemID}
+                    </Typography>
+                    <Typography>
                       Description: {transaction.item_details.Description}
                     </Typography>
                     <Typography>

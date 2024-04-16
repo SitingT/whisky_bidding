@@ -42,4 +42,6 @@ urlpatterns = [
     path('reviews/create', views.create_review, name='create_review'),
     path('api/reviews/reviewee/', views.get_reviews_by_reviewee,
          name='get_reviews_by_reviewee'),
+    path('api/reviews/auth-user/', views.get_auth_user_reviews,
+         name='get_auth_user_reviews'),
 ]

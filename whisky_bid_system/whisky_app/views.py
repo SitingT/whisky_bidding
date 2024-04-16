@@ -15,7 +15,7 @@ from datetime import datetime
 from django.utils import timezone
 from rest_framework.decorators import api_view
 from .models import WhiskyDetail, Bid,  User, Transaction, Review
-from .serializers import WhiskyDetailSerializer, BidSerializer, TransactionSerializer, UserSerializer, TransactionDisplaySerializer, CustomReviewSerializer
+from .serializers import WhiskyDetailSerializer, BidSerializer, TransactionSerializer, UserSerializer, TransactionDisplaySerializer, CustomReviewSerializer, GetReviewSerializer
 from datetime import datetime
 from dateutil.parser import parse as parse_datetime
 from django.db.models import Q, Max, F, Case, When, Value, CharField, DecimalField
@@ -328,3 +328,14 @@ def get_reviews_by_reviewee(request):
         return Response(serializer.data, status=status.HTTP_200_OK)
     except Review.DoesNotExist:
         return Response({'message': 'No reviews found for the specified user'}, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['GET'])
+@permission_classes([PostOnlyAuthenticated])
+def get_auth_user_reviews(request):
+    reviews = Review.objects.filter(ReviewerID=request.user, IsDeleted=False)
+    if reviews.exists():
+        serializer = GetReviewSerializer(reviews, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    else:
+        return Response({'message': 'No reviews found'}, status=status.HTTP_404_NOT_FOUND)

@@ -8,8 +8,8 @@ import {
   Box,
 } from "@mui/material";
 import profile_img from "../Assets/profile.png";
-import ReviewDisplay from "../Review/ReviewsDisplay";
-
+import ReviewFetcher from "../Review/Fetchee";
+import ReviewerFetcher from "../Review/Fetcher";
 function UserDetails() {
   const [user, setUser] = useState(null);
   const [error, setError] = useState("");
@@ -109,7 +109,9 @@ function UserDetails() {
           </CardContent>
         </Card>
         <h2> Reviews Send to Me</h2>
-        <ReviewDisplay />
+        <ReviewFetcher />
+        <h2> Reviews Send by Me</h2>
+        <ReviewerFetcher />
       </Container>
     </Box>
   );
