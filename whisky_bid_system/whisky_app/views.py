@@ -293,7 +293,7 @@ def buyer_transactions(request):
     # Fetch transactions where the user is the buyer
     transactions = Transaction.objects.filter(
         BuyerID=request.user
-    ).select_related('ItemID')  # Ensures that WhiskyDetail data is joined and available
+    ).select_related('ItemID')
 
     serializer = TransactionDisplaySerializer(transactions, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
@@ -305,7 +305,7 @@ def seller_transactions(request):
     # Fetch transactions where the user is the seller
     transactions = Transaction.objects.filter(
         SellerID=request.user
-    ).select_related('ItemID')  # Ensures that WhiskyDetail data is joined and available
+    ).select_related('ItemID')
 
     serializer = TransactionDisplaySerializer(transactions, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)

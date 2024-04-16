@@ -16,7 +16,7 @@ const styles = {
 };
 
 const UserProfile = () => {
-  const [showComponent, setShowComponent] = useState("details"); // 'details' or 'transactions'
+  const [showComponent, setShowComponent] = useState("details");
 
   const handleShowComponent = (component) => () => {
     setShowComponent(component);
