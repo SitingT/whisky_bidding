@@ -8,6 +8,7 @@ import {
   Box,
 } from "@mui/material";
 import profile_img from "../Assets/profile.png";
+import TransactionComponent from "../Transaction/Transaction";
 
 function UserDetails() {
   const [user, setUser] = useState(null);
@@ -108,6 +109,7 @@ function UserDetails() {
           </CardContent>
         </Card>
       </Container>
+      <TransactionComponent />
     </Box>
   );
 }

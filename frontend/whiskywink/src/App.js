@@ -10,7 +10,6 @@ import Footer from "./Components/Footer/Footer";
 import WhiskyReport from "./Pages/report";
 import TransactionForm from "./Pages/checkout";
 import UserProfile from "./Pages/userProfile";
-import TransactionComponent from "./Components/Transaction/Transaction";
 function App() {
   return (
     <div>
@@ -41,7 +40,7 @@ function App() {
           />
           <Route path="/UserProfile" element={<UserProfile />} />
         </Routes>
-        <TransactionComponent />
+
         <Footer />
       </BrowserRouter>
     </div>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Grid, Card, CardContent, Typography, CardMedia } from "@mui/material";
 
 // Images for different whisky categories
 import ScotchImage from "../Assets/product_1.png";
@@ -42,7 +43,6 @@ const TransactionComponent = () => {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        console.log("trans", data);
         setTransactions(data);
       } catch (error) {
         setError(error.toString());
@@ -53,37 +53,57 @@ const TransactionComponent = () => {
   }, [accessToken]);
 
   return (
-    <div>
+    <Grid container spacing={2}>
       {error ? (
-        <p>Error fetching data: {error}</p>
+        <Typography color="error">Error fetching data: {error}</Typography>
       ) : (
-        <div>
-          {transactions.map((transaction) => (
-            <div key={transaction.TransactionID} className="transaction">
-              <h3>Transaction #{transaction.TransactionID}</h3>
-              <p>Final Price: ${transaction.FinalPrice}</p>
-              <p>Status: {transaction.TransactionStatus}</p>
-              <p>Payment Status: {transaction.PaymentStatus}</p>
-              {transaction.item_details && (
-                <div>
-                  <h4>Whisky Details</h4>
-                  <p>{transaction.item_details.Description}</p>
-                  <p>Category: {transaction.item_details.Category}</p>
-                  <p>
-                    Auction Status: {transaction.item_details.AuctionStatus}
-                  </p>
-                  <p>Highest Bid: ${transaction.item_details.HighestBid}</p>
-                  <img
-                    src={getCategoryImage(transaction.item_details.Category)}
-                    alt="Whisky Category"
-                  />
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
+        transactions.map((transaction) => (
+          <Grid item xs={12} sm={6} md={4} key={transaction.TransactionID}>
+            <Card>
+              <CardContent>
+                <Typography variant="h5" component="div">
+                  Transaction #{transaction.TransactionID}
+                </Typography>
+                <Typography color="text.secondary">
+                  Final Price: ${transaction.FinalPrice}
+                </Typography>
+                <Typography color="text.secondary">
+                  Status: {transaction.TransactionStatus}
+                </Typography>
+                <Typography color="text.secondary">
+                  Payment Status: {transaction.PaymentStatus}
+                </Typography>
+                {transaction.item_details && (
+                  <>
+                    <Typography variant="h6">Whisky Details</Typography>
+                    <Typography>
+                      {transaction.item_details.Description}
+                    </Typography>
+                    <Typography>
+                      Category: {transaction.item_details.Category}
+                    </Typography>
+                    <Typography>
+                      Auction Status: {transaction.item_details.AuctionStatus}
+                    </Typography>
+                    <Typography>
+                      Highest Bid: ${transaction.item_details.HighestBid}
+                    </Typography>
+                    <CardMedia
+                      component="img"
+                      height="140"
+                      image={getCategoryImage(
+                        transaction.item_details.Category
+                      )}
+                      alt="Whisky Category"
+                    />
+                  </>
+                )}
+              </CardContent>
+            </Card>
+          </Grid>
+        ))
       )}
-    </div>
+    </Grid>
   );
 };
 
