@@ -35,7 +35,7 @@ const WhiskyCard = ({ whisky, image }) => {
   return (
     <Card
       sx={{
-        width: 370,
+        width: 325,
         display: "flex",
         flexDirection: "column",
       }}

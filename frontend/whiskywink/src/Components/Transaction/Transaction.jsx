@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Grid, Card, CardContent, Typography, CardMedia } from "@mui/material";
-
-// Images for different whisky categories
+import {
+  Grid,
+  Card,
+  CardContent,
+  Typography,
+  CardMedia,
+  Button,
+} from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import ScotchImage from "../Assets/product_1.png";
 import BourbonImage from "../Assets/product_2.png";
 import JapaneseImage from "../Assets/product_3.png";
@@ -11,26 +17,12 @@ const TransactionComponent = ({ role }) => {
   const [transactions, setTransactions] = useState([]);
   const [error, setError] = useState(null);
 
-  const getCategoryImage = (category) => {
-    switch (category) {
-      case "Scotch":
-        return ScotchImage;
-      case "Bourbon":
-        return BourbonImage;
-      case "Japanese":
-        return JapaneseImage;
-      case "Irish":
-        return IrishImage;
-      default:
-        return ""; // Default image or leave as blank
-    }
-  };
-
+  const navigate = useNavigate();
   const accessToken = sessionStorage.getItem("accessToken");
 
   useEffect(() => {
     const fetchTransactions = async () => {
-      const endpoint = `http://localhost:8000/user/transactions/${role}/`; // Modify endpoint based on role
+      const endpoint = `http://localhost:8000/user/transactions/${role}/`;
       try {
         const response = await fetch(endpoint, {
           method: "GET",
@@ -43,37 +35,47 @@ const TransactionComponent = ({ role }) => {
         }
         const data = await response.json();
         setTransactions(data);
-        console.log("transaction", data);
       } catch (error) {
         setError(error.toString());
       }
     };
-
     fetchTransactions();
-  }, [role, accessToken]); // Reacting to role change
+  }, [role, accessToken]);
+
+  const getCategoryImage = (category) => {
+    switch (category) {
+      case "Scotch":
+        return ScotchImage;
+      case "Bourbon":
+        return BourbonImage;
+      case "Japanese":
+        return JapaneseImage;
+      case "Irish":
+        return IrishImage;
+      default:
+        return ""; // Consider adding a default image here
+    }
+  };
+
+  const handleReviewClick = (transaction) => {
+    navigate("/create-review", {
+      state: {
+        ItemID: transaction.item_details.ItemID,
+        RevieweeID: transaction.SellerID,
+      },
+    });
+  };
 
   return (
-    <Grid
-      container
-      spacing={2}
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
+    <Grid container spacing={3} sx={{ mt: 2 }}>
       {error ? (
-        <Typography color="error">Error fetching data: {error}</Typography>
+        <Typography color="error" sx={{ width: "100%", textAlign: "center" }}>
+          Error fetching data: {error}
+        </Typography>
       ) : (
         transactions.map((transaction) => (
           <Grid item xs={12} sm={6} md={4} key={transaction.TransactionID}>
-            <Card
-              sx={{
-                width: 370,
-                display: "flex",
-                flexDirection: "column",
-              }}
-            >
+            <Card sx={{ maxWidth: 345, marginLeft: "100px" }}>
               <CardContent>
                 <Typography variant="h5">
                   Final Price: ${transaction.FinalPrice}
@@ -109,6 +111,24 @@ const TransactionComponent = ({ role }) => {
                         objectFit: "contain",
                       }}
                     />
+                    {role === "buyer" && (
+                      <Button
+                        variant="contained"
+                        style={{
+                          backgroundColor: "#D8BFD8",
+                          color: "black",
+                          padding: "3px 6px",
+                          fontSize: "0.875rem",
+                          height: "32px",
+                          width: "190px",
+                          marginLeft: "80px",
+                        }}
+                        onClick={() => handleReviewClick(transaction)}
+                        sx={{ mt: 2 }}
+                      >
+                        Write a Review
+                      </Button>
+                    )}
                   </>
                 )}
               </CardContent>

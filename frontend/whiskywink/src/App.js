@@ -10,6 +10,7 @@ import Footer from "./Components/Footer/Footer";
 import WhiskyReport from "./Pages/report";
 import TransactionForm from "./Pages/checkout";
 import UserProfile from "./Pages/userProfile";
+import CreateReviewForm from "./Components/Review/Review";
 function App() {
   return (
     <div>
@@ -39,8 +40,9 @@ function App() {
             element={<TransactionForm />}
           />
           <Route path="/UserProfile" element={<UserProfile />} />
+          <Route path="/create-review" element={<CreateReviewForm />} />
         </Routes>
-
+        {/* <CreateReviewForm /> */}
         <Footer />
       </BrowserRouter>
     </div>

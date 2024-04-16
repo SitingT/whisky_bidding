@@ -88,11 +88,13 @@ def create_transaction(request):
 
 
 @api_view(['POST'])
-# Ensures that only authenticated users can post reviews
-@permission_classes([AllowAny])
+@permission_classes([PostOnlyAuthenticated])
 def create_review(request):
+    data = request.data.copy()
+    data['ReviewerID'] = request.user.pk
+
     if request.method == 'POST':
-        serializer = ReviewSerializer(data=request.data)
+        serializer = ReviewSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
