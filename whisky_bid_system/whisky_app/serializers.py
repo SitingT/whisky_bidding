@@ -123,3 +123,20 @@ class ReviewSoftDeleteSerializer(serializers.ModelSerializer):
         fields = ['isDeleted']
         read_only_fields = ['ReviewID', 'ReviewerID', 'RevieweeID',
                             'ItemID', 'Rating', 'Comment', 'CommentTime']
+
+
+class UserDetailSerializer(serializers.ModelSerializer):
+    whisky_sold_count = serializers.SerializerMethodField()
+    reviews = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = ['name', 'email', 'is_staff', 'registration_date',
+                  'overall_rating', 'whisky_sold_count', 'reviews']
+
+    def get_whisky_sold_count(self, obj):
+        return WhiskyDetail.objects.filter(SellerID=obj).count()
+
+    def get_reviews(self, obj):
+        reviews = Review.objects.filter(RevieweeID=obj, IsDeleted=False)
+        return ReviewSerializer(reviews, many=True).data

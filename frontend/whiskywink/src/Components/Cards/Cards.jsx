@@ -14,11 +14,13 @@ import {
   DialogActions,
   Box,
 } from "@mui/material";
+import OtherUserDetails from "../UserProfile/OtherUser";
 
 import DefaultImage from "../Assets/product_1.png"; // Default image if none is provided
 import CreateBidForm from "../CreateBidForm /CreateBidForm";
 const WhiskyCard = ({ whisky, image }) => {
   const [open, setOpen] = useState(false);
+  const [openUserDetails, setOpenUserDetails] = useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -30,6 +32,14 @@ const WhiskyCard = ({ whisky, image }) => {
 
   const closeDialog = () => {
     setOpen(false);
+  };
+
+  const handleUserDetailsClickOpen = () => {
+    setOpenUserDetails(true);
+  };
+
+  const handleUserDetailsClose = () => {
+    setOpenUserDetails(false);
   };
 
   return (
@@ -82,13 +92,24 @@ const WhiskyCard = ({ whisky, image }) => {
             color: "black",
             padding: "3px 6px",
             fontSize: "0.875rem",
-            height: "32px",
-            width: "190px",
-            marginLeft: "80px",
+            marginLeft: "10px",
           }}
           onClick={handleClickOpen} // Opens the Dialog on click
         >
           Bid Now: ${whisky.Current_bid}
+        </Button>
+        <Button
+          variant="outlined"
+          style={{
+            backgroundColor: "#D8BFD8",
+            color: "black",
+            padding: "3px 6px",
+            fontSize: "0.875rem",
+            marginLeft: "70px",
+          }}
+          onClick={handleUserDetailsClickOpen}
+        >
+          View Seller Profile
         </Button>
       </CardActions>
 
@@ -105,6 +126,16 @@ const WhiskyCard = ({ whisky, image }) => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog open={openUserDetails} onClose={handleUserDetailsClose} fullWidth>
+        <DialogTitle>Seller Profile</DialogTitle>
+        <DialogContent>
+          <OtherUserDetails userId={whisky.SellerID} />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleUserDetailsClose}>Close</Button>
         </DialogActions>
       </Dialog>
     </Card>

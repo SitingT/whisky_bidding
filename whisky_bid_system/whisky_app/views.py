@@ -16,7 +16,7 @@ from datetime import datetime
 from django.utils import timezone
 from rest_framework.decorators import api_view
 from .models import WhiskyDetail, Bid,  User, Transaction, Review
-from .serializers import WhiskyDetailSerializer, BidSerializer, TransactionSerializer, UserSerializer, TransactionDisplaySerializer, CustomReviewSerializer, GetReviewSerializer, ReviewSoftDeleteSerializer, ReviewSerializer
+from .serializers import WhiskyDetailSerializer, BidSerializer, TransactionSerializer, UserSerializer, TransactionDisplaySerializer, CustomReviewSerializer, GetReviewSerializer, ReviewSoftDeleteSerializer, ReviewSerializer, UserDetailSerializer
 from datetime import datetime
 from dateutil.parser import parse as parse_datetime
 from django.db.models import Q, Max, F, Case, When, Value, CharField, DecimalField
@@ -340,6 +340,18 @@ def get_auth_user_reviews(request):
         return Response(serializer.data, status=status.HTTP_200_OK)
     else:
         return Response([], status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_user_details(request, user_id):
+    try:
+        user = User.objects.get(id=user_id)
+        serializer = UserDetailSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except User.DoesNotExist:
+        return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
 #####################
 
 
