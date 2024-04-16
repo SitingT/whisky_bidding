@@ -35,6 +35,8 @@ urlpatterns = [
     path('whisky/transaction/create/',
          views.create_transaction, name='create_transaction'),
     path('user/details/', views.get_user_details, name='user-details'),
-    path('user/user_transactions/',
-         views.user_transactions, name='user_transactions'),
+    path('user/transactions/buyer/', views.buyer_transactions,
+         name='buyer_transactions'),
+    path('user/transactions/seller/', views.seller_transactions,
+         name='seller_transactions'),
 ]

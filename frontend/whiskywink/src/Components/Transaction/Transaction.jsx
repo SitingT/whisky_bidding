@@ -7,7 +7,7 @@ import BourbonImage from "../Assets/product_2.png";
 import JapaneseImage from "../Assets/product_3.png";
 import IrishImage from "../Assets/product_4.png";
 
-const TransactionComponent = () => {
+const TransactionComponent = ({ role }) => {
   const [transactions, setTransactions] = useState([]);
   const [error, setError] = useState(null);
 
@@ -27,57 +27,65 @@ const TransactionComponent = () => {
   };
 
   const accessToken = sessionStorage.getItem("accessToken");
+
   useEffect(() => {
     const fetchTransactions = async () => {
+      const endpoint = `http://localhost:8000/user/transactions/${role}/`; // Modify endpoint based on role
       try {
-        const response = await fetch(
-          "http://localhost:8000/user/user_transactions/",
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
+        const response = await fetch(endpoint, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
         setTransactions(data);
+        console.log("transaction", data);
       } catch (error) {
         setError(error.toString());
       }
     };
 
     fetchTransactions();
-  }, [accessToken]);
+  }, [role, accessToken]); // Reacting to role change
 
   return (
-    <Grid container spacing={2}>
+    <Grid
+      container
+      spacing={2}
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
       {error ? (
         <Typography color="error">Error fetching data: {error}</Typography>
       ) : (
         transactions.map((transaction) => (
           <Grid item xs={12} sm={6} md={4} key={transaction.TransactionID}>
-            <Card>
+            <Card
+              sx={{
+                width: 370,
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
               <CardContent>
-                <Typography variant="h5" component="div">
-                  Transaction #{transaction.TransactionID}
-                </Typography>
-                <Typography color="text.secondary">
+                <Typography variant="h5">
                   Final Price: ${transaction.FinalPrice}
                 </Typography>
-                <Typography color="text.secondary">
-                  Status: {transaction.TransactionStatus}
-                </Typography>
-                <Typography color="text.secondary">
+                <Typography>
                   Payment Status: {transaction.PaymentStatus}
                 </Typography>
                 {transaction.item_details && (
                   <>
-                    <Typography variant="h6">Whisky Details</Typography>
+                    <Typography variant="h5">Whisky Details</Typography>
                     <Typography>
-                      {transaction.item_details.Description}
+                      Description: {transaction.item_details.Description}
                     </Typography>
                     <Typography>
                       Category: {transaction.item_details.Category}
@@ -95,6 +103,11 @@ const TransactionComponent = () => {
                         transaction.item_details.Category
                       )}
                       alt="Whisky Category"
+                      sx={{
+                        width: "auto",
+                        maxWidth: "100%",
+                        objectFit: "contain",
+                      }}
                     />
                   </>
                 )}

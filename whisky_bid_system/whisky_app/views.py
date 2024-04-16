@@ -274,12 +274,24 @@ def get_user_details(request):
 
 
 @api_view(['GET'])
-@permission_classes([AllowAny])
-def user_transactions(request):
-    # Fetch transactions where the user is either the buyer or the seller
+@permission_classes([PostOnlyAuthenticated])
+def buyer_transactions(request):
+    # Fetch transactions where the user is the buyer
     transactions = Transaction.objects.filter(
-        Q(BuyerID=request.user)
-    ).select_related('ItemID')  # Optimizes by joining with WhiskyDetail
+        BuyerID=request.user
+    ).select_related('ItemID')  # Ensures that WhiskyDetail data is joined and available
+
+    serializer = TransactionDisplaySerializer(transactions, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([PostOnlyAuthenticated])
+def seller_transactions(request):
+    # Fetch transactions where the user is the seller
+    transactions = Transaction.objects.filter(
+        SellerID=request.user
+    ).select_related('ItemID')  # Ensures that WhiskyDetail data is joined and available
 
     serializer = TransactionDisplaySerializer(transactions, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
