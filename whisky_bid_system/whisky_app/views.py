@@ -365,16 +365,16 @@ def get_user_details(request, user_id):
 
 
 @api_view(['GET'])
+# You might want to change this to authenticated permissions
 @permission_classes([AllowAny])
 def get_messages(request):
-    sender_id = request.query_params.get('sender_id')
-    receiver_id = request.query_params.get('receiver_id')
-    messages = Message.objects.all().order_by('SendTime')  # Order messages by time
+    user_id = request.query_params.get('user_id')
+    chat_with_id = request.query_params.get('chat_with_id')
 
-    if sender_id:
-        messages = messages.filter(SenderID=sender_id)
-    if receiver_id:
-        messages = messages.filter(ReceiverID=receiver_id)
+    messages = Message.objects.filter(
+        (Q(SenderID=user_id) & Q(ReceiverID=chat_with_id)) |
+        (Q(SenderID=chat_with_id) & Q(ReceiverID=user_id))
+    ).order_by('SendTime')  # Ensuring messages are ordered by SendTime
 
     serializer = MessageSerializer(messages, many=True)
     return Response(serializer.data)

@@ -47,6 +47,8 @@ urlpatterns = [
          name='get_auth_user_reviews'),
     path('api/reviews/delete/<int:review_id>/',
          views.soft_delete_review, name='soft_delete_review'),
-    path('send-message/', views.send_message, name='send-message'),
-    path('messages/', views.get_messages, name='get-messages'),
+    path('chat/', include([
+        path('send-message/', views.send_message, name='send-message'),
+        path('messages/', views.get_messages, name='get-messages'),
+    ])),
 ]
