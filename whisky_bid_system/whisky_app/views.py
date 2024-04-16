@@ -279,7 +279,7 @@ def whisky_sell(request):
 
 @api_view(['GET'])
 @permission_classes([PostOnlyAuthenticated])
-def get_user_details(request):
+def get_user_details_auth(request):
     try:
         user = User.objects.get(id=request.user.pk)
         serializer = UserSerializer(user)
