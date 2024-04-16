@@ -177,3 +177,19 @@ class Review(models.Model):
 
     class Meta:
         db_table = 'Reviews'
+
+
+class Message(models.Model):
+    MessageID = models.AutoField(primary_key=True, db_column='MessageID')
+    SenderID = models.ForeignKey(
+        'User', on_delete=models.CASCADE, related_name='sent_messages', db_column='SenderID')
+    ReceiverID = models.ForeignKey(
+        'User', on_delete=models.CASCADE, related_name='received_messages', db_column='ReceiverID')
+    Content = models.TextField(db_column='Content')
+    SendTime = models.DateTimeField(default=timezone.now, db_column='SendTime')
+    IsSensitive = models.BooleanField(default=False, db_column='IsSensitive')
+    RelatedItemID = models.ForeignKey(
+        'WhiskyDetail', on_delete=models.SET_NULL, null=True, db_column='RelatedItemID')
+
+    class Meta:
+        db_table = 'Messages'

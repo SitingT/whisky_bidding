@@ -2,7 +2,7 @@ from .models import Review, User
 from .models import Transaction, PaymentMethod
 from rest_framework import serializers
 from .models import User
-from .models import WhiskyDetail, Bid, Review
+from .models import WhiskyDetail, Bid, Review, Message
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
@@ -140,3 +140,13 @@ class UserDetailSerializer(serializers.ModelSerializer):
     def get_reviews(self, obj):
         reviews = Review.objects.filter(RevieweeID=obj, IsDeleted=False)
         return ReviewSerializer(reviews, many=True).data
+
+
+class MessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Message
+        fields = ['MessageID', 'SenderID', 'ReceiverID',
+                  'Content', 'RelatedItemID']
+
+    def create(self, validated_data):
+        return Message.objects.create(**validated_data)

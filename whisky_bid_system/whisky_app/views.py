@@ -15,8 +15,8 @@ from .permissions import PostOnlyAuthenticated, IsAdminUser
 from datetime import datetime
 from django.utils import timezone
 from rest_framework.decorators import api_view
-from .models import WhiskyDetail, Bid,  User, Transaction, Review
-from .serializers import WhiskyDetailSerializer, BidSerializer, TransactionSerializer, UserSerializer, TransactionDisplaySerializer, CustomReviewSerializer, GetReviewSerializer, ReviewSoftDeleteSerializer, ReviewSerializer, UserDetailSerializer
+from .models import WhiskyDetail, Bid,  User, Transaction, Review, Message
+from .serializers import WhiskyDetailSerializer, BidSerializer, TransactionSerializer, UserSerializer, TransactionDisplaySerializer, CustomReviewSerializer, GetReviewSerializer, ReviewSoftDeleteSerializer, ReviewSerializer, UserDetailSerializer, MessageSerializer
 from datetime import datetime
 from dateutil.parser import parse as parse_datetime
 from django.db.models import Q, Max, F, Case, When, Value, CharField, DecimalField
@@ -96,6 +96,17 @@ def create_review(request):
 
     if request.method == 'POST':
         serializer = ReviewSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def send_message(request):
+    if request.method == 'POST':
+        serializer = MessageSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -352,6 +363,21 @@ def get_user_details(request, user_id):
     except User.DoesNotExist:
         return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_messages(request):
+    sender_id = request.query_params.get('sender_id')
+    receiver_id = request.query_params.get('receiver_id')
+    messages = Message.objects.all().order_by('SendTime')  # Order messages by time
+
+    if sender_id:
+        messages = messages.filter(SenderID=sender_id)
+    if receiver_id:
+        messages = messages.filter(ReceiverID=receiver_id)
+
+    serializer = MessageSerializer(messages, many=True)
+    return Response(serializer.data)
 #####################
 
 
