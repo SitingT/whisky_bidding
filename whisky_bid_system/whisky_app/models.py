@@ -45,8 +45,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         auto_now_add=True, db_column='RegistrationDate')
     last_login = models.DateTimeField(
         null=True, blank=True, db_column='LastLoginDate')
-    overall_rating = models.IntegerField(
-        null=True, blank=True, db_column='OverallRating')
+    overall_rating = models.DecimalField(
+        null=True, blank=True, max_digits=10, decimal_places=2, db_column='OverallRating')
 
     objects = UserManager()
 

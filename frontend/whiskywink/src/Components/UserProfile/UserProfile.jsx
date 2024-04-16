@@ -37,7 +37,7 @@ function UserDetails() {
         }
 
         const data = await response.json();
-
+        console.log("llll", data);
         setUser(data);
       } catch (error) {
         setError("Failed to fetch user details.");

@@ -28,7 +28,14 @@ const ReviewerFetcher = () => {
     fetchReviews();
   }, [accessToken]);
 
-  return <ReviewDisplay reviews={reviews} error={error} CanBeDelete={true} />;
+  const content =
+    reviews.length > 0 ? (
+      <ReviewDisplay reviews={reviews} CanBeDelete={true} />
+    ) : (
+      <p>No reviews yet.</p>
+    );
+
+  return content;
 };
 
 export default ReviewerFetcher;
