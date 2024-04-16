@@ -1,7 +1,7 @@
 from .models import Transaction, PaymentMethod
 from rest_framework import serializers
 from .models import User
-from .models import WhiskyDetail, Bid
+from .models import WhiskyDetail, Bid, Review
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
@@ -83,3 +83,10 @@ class TransactionDisplaySerializer(serializers.ModelSerializer):
         model = Transaction
         fields = ['TransactionID', 'FinalPrice',
                   'TransactionStatus', 'PaymentStatus', 'item_details', 'SellerID',]
+
+
+class ReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Review
+        fields = ['ReviewID', 'ReviewerID',
+                  'RevieweeID', 'ItemID', 'Rating', 'Comment']

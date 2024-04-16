@@ -15,7 +15,7 @@ from datetime import datetime
 from django.utils import timezone
 from rest_framework.decorators import api_view
 from .models import WhiskyDetail, Bid,  User, Transaction
-from .serializers import WhiskyDetailSerializer, BidSerializer, TransactionSerializer, UserSerializer, TransactionDisplaySerializer
+from .serializers import WhiskyDetailSerializer, BidSerializer, TransactionSerializer, UserSerializer, TransactionDisplaySerializer, ReviewSerializer
 from datetime import datetime
 from dateutil.parser import parse as parse_datetime
 from django.db.models import Q, Max, F, Case, When, Value, CharField, DecimalField
@@ -84,6 +84,18 @@ def create_transaction(request):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+# Ensures that only authenticated users can post reviews
+@permission_classes([AllowAny])
+def create_review(request):
+    if request.method == 'POST':
+        serializer = ReviewSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 #############################
 

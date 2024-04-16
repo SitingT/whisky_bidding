@@ -158,3 +158,22 @@ class Transaction(models.Model):
 
     class Meta:
         db_table = 'Transactions'
+
+
+class Review(models.Model):
+    ReviewID = models.AutoField(primary_key=True, db_column='ReviewID')
+    ReviewerID = models.ForeignKey(
+        'User', on_delete=models.CASCADE, related_name='reviewer_reviews', db_column='ReviewerID')
+    RevieweeID = models.ForeignKey(
+        'User', on_delete=models.CASCADE, related_name='reviewee_reviews', db_column='RevieweeID')
+    ItemID = models.ForeignKey(
+        'WhiskyDetail', on_delete=models.CASCADE, db_column='ItemID')
+    Rating = models.DecimalField(
+        max_digits=3, decimal_places=2, db_column='Rating')
+    Comment = models.TextField(db_column='Comment')
+    CommentTime = models.DateTimeField(
+        default=timezone.now, db_column='CommentTime')
+    IsDeleted = models.BooleanField(default=False, db_column='IsDeleted')
+
+    class Meta:
+        db_table = 'Reviews'

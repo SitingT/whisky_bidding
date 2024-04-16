@@ -39,4 +39,5 @@ urlpatterns = [
          name='buyer_transactions'),
     path('user/transactions/seller/', views.seller_transactions,
          name='seller_transactions'),
+    path('reviews/create', views.create_review, name='create_review'),
 ]
