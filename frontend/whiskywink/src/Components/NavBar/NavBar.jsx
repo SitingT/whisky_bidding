@@ -90,6 +90,9 @@ const NavBar = () => {
         <Link to="/Report">
           <button> Report for Admin </button>
         </Link>
+        <Link to="/UserProfile">
+          <button> My Profile </button>
+        </Link>
         {isLoggedIn ? (
           <button onClick={handleLogout}>Log Out</button>
         ) : (

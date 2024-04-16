@@ -9,7 +9,7 @@ import MyBid from "./Pages/MyBid";
 import Footer from "./Components/Footer/Footer";
 import WhiskyReport from "./Pages/report";
 import TransactionForm from "./Pages/checkout";
-import UserDetails from "./Components/UserProfile/UserProfile";
+import UserProfile from "./Pages/userProfile";
 function App() {
   return (
     <div>
@@ -38,8 +38,9 @@ function App() {
             path="/checkout/:ItemID/:SellerID/:Price"
             element={<TransactionForm />}
           />
+          <Route path="/UserProfile" element={<UserProfile />} />
         </Routes>
-        <UserDetails />
+
         <Footer />
       </BrowserRouter>
     </div>
