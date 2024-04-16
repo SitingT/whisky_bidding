@@ -15,7 +15,7 @@ from datetime import datetime
 from django.utils import timezone
 from rest_framework.decorators import api_view
 from .models import WhiskyDetail, Bid,  User, Transaction
-from .serializers import WhiskyDetailSerializer, BidSerializer, TransactionSerializer, UserSerializer
+from .serializers import WhiskyDetailSerializer, BidSerializer, TransactionSerializer, UserSerializer, TransactionDisplaySerializer
 from datetime import datetime
 from dateutil.parser import parse as parse_datetime
 from django.db.models import Q, Max, F, Case, When, Value, CharField, DecimalField
@@ -271,3 +271,15 @@ def get_user_details(request):
         return Response(serializer.data, status=status.HTTP_200_OK)
     except User.DoesNotExist:
         return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def user_transactions(request):
+    # Fetch transactions where the user is either the buyer or the seller
+    transactions = Transaction.objects.filter(
+        Q(BuyerID=request.user)
+    ).select_related('ItemID')  # Optimizes by joining with WhiskyDetail
+
+    serializer = TransactionDisplaySerializer(transactions, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)

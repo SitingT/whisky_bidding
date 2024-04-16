@@ -5,6 +5,7 @@ import {
   Typography,
   CardMedia,
   Container,
+  Box,
 } from "@mui/material";
 import profile_img from "../Assets/profile.png";
 
@@ -21,7 +22,7 @@ function UserDetails() {
 
     const fetchUserDetails = async () => {
       try {
-        const response = await fetch(`http://localhost:8000//user/details/`, {
+        const response = await fetch(`http://localhost:8000/user/details/`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -35,6 +36,7 @@ function UserDetails() {
         }
 
         const data = await response.json();
+
         setUser(data);
       } catch (error) {
         setError("Failed to fetch user details.");
@@ -45,68 +47,68 @@ function UserDetails() {
     fetchUserDetails();
   }, [accessToken]);
 
-  if (!accessToken) {
-    return (
-      <Container maxWidth="sm" sx={{ marginTop: 4 }}>
-        <Typography variant="h6" align="center">
-          {error}
-        </Typography>
-      </Container>
-    );
-  }
-
   return (
-    <Container maxWidth="md" sx={{ marginTop: 4 }}>
-      <Card sx={{ maxWidth: 600, margin: "auto" }}>
-        <CardMedia
-          component="img"
-          height="300"
-          image={profile_img}
-          alt="Personal Image"
-          sx={{
-            width: "auto",
-            maxWidth: "100%",
-            objectFit: "contain",
-          }}
-        />
-        <CardContent>
-          {error ? (
-            <Typography color="error" align="center">
-              {error}
-            </Typography>
-          ) : user ? (
-            <>
-              <Typography variant="h5" component="div" align="center">
-                {user.name}
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        minHeight: "100vh",
+      }}
+    >
+      <Container maxWidth="md">
+        <Card sx={{ width: "100vh" }}>
+          <CardMedia
+            component="img"
+            height="300"
+            image={profile_img}
+            alt="Personal Image"
+            sx={{
+              //   width: "auto",
+              maxWidth: "100%",
+              objectFit: "contain",
+              margin: "auto",
+            }}
+          />
+          <CardContent>
+            {error ? (
+              <Typography color="error" align="center">
+                {error}
               </Typography>
-              <Typography color="text.secondary" align="center">
-                Email: {user.email}
-              </Typography>
-              <Typography color="text.secondary" align="center">
-                Staff: {user.is_staff ? "Yes" : "No"}
-              </Typography>
-              <Typography color="text.secondary" align="center">
-                Registration Date:{" "}
-                {new Date(user.registration_date).toLocaleDateString()}
-              </Typography>
-              {user.overall_rating !== null ? (
-                <Typography color="text.secondary" align="center">
-                  Overall Rating: {user.overall_rating}
+            ) : user ? (
+              <>
+                <Typography variant="h4" component="div" align="center">
+                  Name : {user.name}
                 </Typography>
-              ) : (
-                <Typography color="text.secondary" align="center">
-                  No one gives you a rating yet.
+                <Typography variant="h5" align="center">
+                  Email: {user.email}
                 </Typography>
-              )}
-            </>
-          ) : (
-            <Typography component="div" align="center">
-              Loading...
-            </Typography>
-          )}
-        </CardContent>
-      </Card>
-    </Container>
+                <Typography variant="h5" align="center">
+                  Staff: {user.is_staff ? "Yes" : "No"}
+                </Typography>
+                <Typography variant="h5" align="center">
+                  Registration Date:{" "}
+                  {new Date(user.registration_date).toLocaleDateString()}
+                </Typography>
+                {user.overall_rating !== null ? (
+                  <Typography variant="h5" align="center">
+                    Overall Rating: {user.overall_rating}
+                  </Typography>
+                ) : (
+                  <Typography variant="h5" align="center">
+                    No one gives you a rating yet.
+                  </Typography>
+                )}
+              </>
+            ) : (
+              <Typography component="div" align="center">
+                Loading...
+              </Typography>
+            )}
+          </CardContent>
+        </Card>
+      </Container>
+    </Box>
   );
 }
 

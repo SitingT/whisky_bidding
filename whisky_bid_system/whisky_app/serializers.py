@@ -67,3 +67,19 @@ class UserSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'overall_rating': {'required': False, 'allow_null': True}
         }
+
+
+class WhiskyTransSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WhiskyDetail
+        fields = ['ItemID', 'Description',
+                  'Category', 'AuctionStatus', 'HighestBid']
+
+
+class TransactionDisplaySerializer(serializers.ModelSerializer):
+    item_details = WhiskyTransSerializer(source='ItemID', read_only=True)
+
+    class Meta:
+        model = Transaction
+        fields = ['TransactionID', 'FinalPrice',
+                  'TransactionStatus', 'PaymentStatus', 'item_details']
