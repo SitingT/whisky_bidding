@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from django.db.models import Count, Max
 from django.db.models import Subquery, OuterRef
 from django.db.models.functions import Coalesce
+from django.db import transaction
 # Create your views here.
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -15,7 +16,7 @@ from datetime import datetime
 from django.utils import timezone
 from rest_framework.decorators import api_view
 from .models import WhiskyDetail, Bid,  User, Transaction, Review
-from .serializers import WhiskyDetailSerializer, BidSerializer, TransactionSerializer, UserSerializer, TransactionDisplaySerializer, CustomReviewSerializer, GetReviewSerializer
+from .serializers import WhiskyDetailSerializer, BidSerializer, TransactionSerializer, UserSerializer, TransactionDisplaySerializer, CustomReviewSerializer, GetReviewSerializer, ReviewSoftDeleteSerializer
 from datetime import datetime
 from dateutil.parser import parse as parse_datetime
 from django.db.models import Q, Max, F, Case, When, Value, CharField, DecimalField
@@ -339,3 +340,21 @@ def get_auth_user_reviews(request):
         return Response(serializer.data, status=status.HTTP_200_OK)
     else:
         return Response({'message': 'No reviews found'}, status=status.HTTP_404_NOT_FOUND)
+
+#####################
+
+
+@api_view(['PATCH'])
+@permission_classes([PostOnlyAuthenticated])
+def soft_delete_review(request, review_id):
+    try:
+        with transaction.atomic():
+            review = Review.objects.get(pk=review_id, ReviewerID=request.user)
+            if not review.IsDeleted:
+                review.IsDeleted = True
+                review.save()
+                return Response({'message': 'Review has been marked as deleted.'}, status=status.HTTP_200_OK)
+            else:
+                return Response({'message': 'Review is already marked as deleted.'}, status=status.HTTP_400_BAD_REQUEST)
+    except Review.DoesNotExist:
+        return Response({'message': 'Review not found or not authorized to delete this review.'}, status=status.HTTP_404_NOT_FOUND)

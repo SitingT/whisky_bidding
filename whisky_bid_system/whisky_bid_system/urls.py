@@ -44,4 +44,6 @@ urlpatterns = [
          name='get_reviews_by_reviewee'),
     path('api/reviews/auth-user/', views.get_auth_user_reviews,
          name='get_auth_user_reviews'),
+    path('api/reviews/delete/<int:review_id>/',
+         views.soft_delete_review, name='soft_delete_review'),
 ]

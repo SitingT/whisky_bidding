@@ -115,3 +115,11 @@ class GetReviewSerializer(serializers.ModelSerializer):
     def get_RevieweeName(self, obj):
 
         return obj.RevieweeID.name if obj.RevieweeID else None
+
+
+class ReviewSoftDeleteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Review
+        fields = ['isDeleted']
+        read_only_fields = ['ReviewID', 'ReviewerID', 'RevieweeID',
+                            'ItemID', 'Rating', 'Comment', 'CommentTime']

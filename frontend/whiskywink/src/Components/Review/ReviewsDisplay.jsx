@@ -1,8 +1,28 @@
 import React from "react";
-import { Card, CardContent, Typography, Box } from "@mui/material";
+import { Box, Card, CardContent, Typography, Button } from "@mui/material";
 
-const ReviewDisplay = ({ reviews, error }) => {
-  console.log("Reviews:", reviews);
+const ReviewDisplay = ({ reviews, error, CanBeDelete }) => {
+  const accessToken = sessionStorage.getItem("accessToken");
+  const handleDelete = (reviewId) => {
+    fetch(`http://localhost:8000/api/reviews/delete/${reviewId}/`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data);
+        alert("Review deleted successfully.");
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        alert("Error deleting the review.");
+      });
+  };
+
   return (
     <Box
       sx={{
@@ -31,6 +51,16 @@ const ReviewDisplay = ({ reviews, error }) => {
               </Typography>
               <Typography variant="body1">Rating: {review.Rating}</Typography>
               <Typography variant="body1">Comment: {review.Comment}</Typography>
+              {CanBeDelete && (
+                <Button
+                  color="error"
+                  variant="contained"
+                  onClick={() => handleDelete(review.ReviewID)}
+                  sx={{ mt: 2 }}
+                >
+                  Delete
+                </Button>
+              )}
             </CardContent>
           </Card>
         ))
