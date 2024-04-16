@@ -9,12 +9,13 @@ import {
   Typography,
 } from "@mui/material";
 
-function ChatBox() {
+function ChatBox({ chatWithUserID }) {
+  // Now accepts chatWithUserID as a prop
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
-  const chatWithUserID = 2; // The ID of the user you are chatting with, hardcoded for simplicity
 
   const accessToken = sessionStorage.getItem("accessToken");
+
   // Function to fetch messages
   const fetchMessages = async () => {
     const response = await fetch(
@@ -62,7 +63,7 @@ function ChatBox() {
     fetchMessages();
     const interval = setInterval(fetchMessages, 5000); // Fetch messages every 5 seconds
     return () => clearInterval(interval); // Cleanup on unmount
-  }, []);
+  }, [chatWithUserID]); // Add chatWithUserID to dependency array
 
   return (
     <Box sx={{ maxWidth: 500, margin: "0 auto", textAlign: "center" }}>
