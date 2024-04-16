@@ -103,10 +103,14 @@ def create_review(request):
 
 
 @api_view(['POST'])
-@permission_classes([AllowAny])
+@permission_classes([PostOnlyAuthenticated])
 def send_message(request):
     if request.method == 'POST':
-        serializer = MessageSerializer(data=request.data)
+        data = request.data.copy()
+        data['SenderID'] = request.user.id
+
+        # Initialize the serializer with the modified data
+        serializer = MessageSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -365,11 +369,15 @@ def get_user_details(request, user_id):
 
 
 @api_view(['GET'])
-# You might want to change this to authenticated permissions
-@permission_classes([AllowAny])
+@permission_classes([PostOnlyAuthenticated])
 def get_messages(request):
-    user_id = request.query_params.get('user_id')
+    # The authenticated user's ID
+    user_id = request.user.id
+    # ID of the other chat participant passed via query params
     chat_with_id = request.query_params.get('chat_with_id')
+
+    if not chat_with_id:
+        return Response({"error": "Chat with user ID must be provided."}, status=400)
 
     messages = Message.objects.filter(
         (Q(SenderID=user_id) & Q(ReceiverID=chat_with_id)) |
