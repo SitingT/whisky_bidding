@@ -14,7 +14,7 @@ from .permissions import PostOnlyAuthenticated, IsAdminUser
 from datetime import datetime
 from django.utils import timezone
 from rest_framework.decorators import api_view
-from .models import WhiskyDetail, Bid,  User, Transaction
+from .models import WhiskyDetail, Bid,  User, Transaction, Review
 from .serializers import WhiskyDetailSerializer, BidSerializer, TransactionSerializer, UserSerializer, TransactionDisplaySerializer, ReviewSerializer
 from datetime import datetime
 from dateutil.parser import parse as parse_datetime
@@ -309,3 +309,15 @@ def seller_transactions(request):
 
     serializer = TransactionDisplaySerializer(transactions, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_reviews_by_reviewee(request, reviewee_id):
+    try:
+        reviews = Review.objects.filter(
+            RevieweeID=reviewee_id, IsDeleted=False)
+        serializer = ReviewSerializer(reviews, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except Review.DoesNotExist:
+        return Response({'message': 'No reviews found for the specified RevieweeID'}, status=status.HTTP_404_NOT_FOUND)

@@ -1,3 +1,4 @@
+from .models import Review, User
 from .models import Transaction, PaymentMethod
 from rest_framework import serializers
 from .models import User
@@ -90,3 +91,16 @@ class ReviewSerializer(serializers.ModelSerializer):
         model = Review
         fields = ['ReviewID', 'ReviewerID',
                   'RevieweeID', 'ItemID', 'Rating', 'Comment']
+
+
+class CustomReviewSerializer(serializers.ModelSerializer):
+    ReviewerName = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Review
+        fields = ['Rating', 'Comment', 'ReviewerName']
+
+    def get_ReviewerName(self, obj):
+        # Assuming ReviewerID is a ForeignKey to User
+        reviewer = User.objects.get(id=obj.ReviewerID.id)
+        return reviewer.get_full_name()
