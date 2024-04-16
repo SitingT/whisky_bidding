@@ -108,7 +108,7 @@ function UserDetails() {
             )}
           </CardContent>
         </Card>
-        <h2> My Reviews</h2>
+        <h2> Reviews Send to Me</h2>
         <ReviewDisplay />
       </Container>
     </Box>
