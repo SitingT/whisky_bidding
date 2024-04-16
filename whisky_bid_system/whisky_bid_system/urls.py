@@ -40,6 +40,6 @@ urlpatterns = [
     path('user/transactions/seller/', views.seller_transactions,
          name='seller_transactions'),
     path('reviews/create', views.create_review, name='create_review'),
-    path('api/reviews/reviewee/<int:reviewee_id>/',
-         views.get_reviews_by_reviewee, name='get_reviews_by_reviewee'),
+    path('api/reviews/reviewee/', views.get_reviews_by_reviewee,
+         name='get_reviews_by_reviewee'),
 ]

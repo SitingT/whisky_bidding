@@ -312,12 +312,19 @@ def seller_transactions(request):
 
 
 @api_view(['GET'])
-@permission_classes([AllowAny])
-def get_reviews_by_reviewee(request, reviewee_id):
+# Ensure the user is authenticated
+@permission_classes([PostOnlyAuthenticated])
+def get_reviews_by_reviewee(request):
+    # Check if a user_id query parameter is provided
+    user_id = request.query_params.get('user_id', None)
+
+    # If no user_id is provided, default to the authenticated user's ID
+    if not user_id:
+        user_id = request.user.id
+
     try:
-        reviews = Review.objects.filter(
-            RevieweeID=reviewee_id, IsDeleted=False)
+        reviews = Review.objects.filter(RevieweeID=user_id, IsDeleted=False)
         serializer = CustomReviewSerializer(reviews, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     except Review.DoesNotExist:
-        return Response({'message': 'No reviews found for the specified RevieweeID'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'message': 'No reviews found for the specified user'}, status=status.HTTP_404_NOT_FOUND)
