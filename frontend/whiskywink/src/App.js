@@ -43,7 +43,7 @@ function App() {
           />
           <Route path="/UserProfile" element={<UserProfile />} />
           <Route path="/create-review" element={<CreateReviewForm />} />
-          <Route path="/chat/:sellerID/:itemID" element={<ChatPage />} />
+          <Route path="/chat/:sellerID/:itemID?" element={<ChatPage />} />
         </Routes>
         <ConversationsList />
         <Footer />

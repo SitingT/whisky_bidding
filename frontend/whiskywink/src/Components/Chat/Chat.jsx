@@ -41,9 +41,10 @@ function ChatBox({ chatWithUserID, itemID }) {
       Content: newMessage,
       SendTime: new Date().toISOString(),
       IsSensitive: false,
-      RelatedItemID: itemID,
+      RelatedItemID: itemID && itemID !== "none" ? itemID : null,
     };
 
+    console.log("input", messageData);
     const response = await fetch("http://localhost:8000/chat/send-message/", {
       method: "POST",
       headers: {

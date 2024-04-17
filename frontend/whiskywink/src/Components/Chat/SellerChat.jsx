@@ -5,10 +5,12 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import { deepPurple } from "@mui/material/colors";
+import { useNavigate } from "react-router-dom";
 
 function ConversationsList({ selectConversation }) {
   const [conversations, setConversations] = useState([]);
   const accessToken = sessionStorage.getItem("accessToken");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchConversations = async () => {
@@ -35,29 +37,36 @@ function ConversationsList({ selectConversation }) {
     fetchConversations();
   }, [accessToken]);
   console.log("chat list", conversations);
+
+  const handleListItemClick = (user) => {
+    navigate(`/chat/${user.id}`);
+    selectConversation && selectConversation(user);
+  };
+
   return (
-    <List sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
+    <List sx={{ width: "100%" }}>
       {conversations.map((user) => (
         <ListItem
           key={user.id}
           //   alignItems="flex-start"
-          //   onClick={() => selectConversation(user)}
+          onClick={() => handleListItemClick(user)}
         >
           <ListItemAvatar>
-            <Avatar sx={{ bgcolor: deepPurple[500] }}>
-              {user.name} {user.id}
+            <Avatar
+              sx={{
+                width: 56,
+                height: 56,
+                fontSize: "0.8rem",
+                backgroundColor: "#D8BFD8",
+                color: "black",
+              }}
+            >
+              {`${user.name} ${user.id}`}
             </Avatar>
           </ListItemAvatar>
         </ListItem>
       ))}
     </List>
-    // <div>
-    //   {conversations.map((user) => (
-    //     <li key={user.id} onClick={() => selectConversation(user)}>
-    //       {user.first_name} {user.last_name}
-    //     </li>
-    //   ))}
-    // </div>
   );
 }
 
