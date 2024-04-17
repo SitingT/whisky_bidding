@@ -7,7 +7,7 @@ const ChatPage = () => {
 
   return (
     <div>
-      <h1>Chat about Item ID: {itemID}</h1>
+      <h1> {itemID ? `Chat about Item ID: ${itemID}` : "Chat"}</h1>
       <ChatBox chatWithUserID={sellerID} itemID={itemID} />
     </div>
   );

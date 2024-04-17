@@ -395,7 +395,8 @@ def list_conversations(request):
 
     # Find all distinct users that have sent or received messages from/to the logged-in user
     users = User.objects.filter(
-        Q(received_messages__SenderID=user_id)
+        Q(sent_messages__ReceiverID=user_id) | Q(
+            received_messages__SenderID=user_id)
     ).distinct().exclude(id=user_id)
 
     # Assuming you have a simple serializer for User that returns user information
