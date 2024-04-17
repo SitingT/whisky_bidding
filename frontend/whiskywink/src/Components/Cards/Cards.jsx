@@ -120,7 +120,7 @@ const WhiskyCard = ({ whisky, image }) => {
             color: "black",
             padding: "3px 6px",
             fontSize: "0.875rem",
-            marginLeft: "70px",
+            marginLeft: "10px",
           }}
           onClick={handleUserDetailsClickOpen}
         >
