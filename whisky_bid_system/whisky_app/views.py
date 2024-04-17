@@ -386,6 +386,22 @@ def get_messages(request):
 
     serializer = MessageSerializer(messages, many=True)
     return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([PostOnlyAuthenticated])
+def list_conversations(request):
+    user_id = request.user.id
+
+    # Find all distinct users that have sent or received messages from/to the logged-in user
+    users = User.objects.filter(
+        Q(received_messages__SenderID=user_id)
+    ).distinct().exclude(id=user_id)
+
+    # Assuming you have a simple serializer for User that returns user information
+    serializer = UserSerializer(users, many=True)
+    return Response(serializer.data)
+
 #####################
 
 

@@ -51,4 +51,7 @@ urlpatterns = [
         path('send-message/', views.send_message, name='send-message'),
         path('messages/', views.get_messages, name='get-messages'),
     ])),
+    path('list_conversations/', views.list_conversations,
+         name='list_conversations'),
+
 ]

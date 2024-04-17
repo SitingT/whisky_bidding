@@ -63,7 +63,7 @@ class TransactionSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['name', 'email', 'is_staff',
+        fields = ['name', 'email', 'is_staff', 'id',
                   'registration_date', 'overall_rating']
         extra_kwargs = {
             'overall_rating': {'required': False, 'allow_null': True}

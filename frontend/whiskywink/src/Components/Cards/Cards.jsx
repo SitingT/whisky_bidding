@@ -18,7 +18,10 @@ import OtherUserDetails from "../UserProfile/OtherUser";
 
 import DefaultImage from "../Assets/product_1.png"; // Default image if none is provided
 import CreateBidForm from "../CreateBidForm /CreateBidForm";
+import { useNavigate } from "react-router-dom";
+
 const WhiskyCard = ({ whisky, image }) => {
+  let navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [openUserDetails, setOpenUserDetails] = useState(false);
 
@@ -97,6 +100,19 @@ const WhiskyCard = ({ whisky, image }) => {
           onClick={handleClickOpen} // Opens the Dialog on click
         >
           Bid Now: ${whisky.Current_bid}
+        </Button>
+        <Button
+          variant="contained"
+          style={{
+            backgroundColor: "#D8BFD8",
+            color: "black",
+            padding: "3px 6px",
+            fontSize: "0.875rem",
+            marginLeft: "10px",
+          }}
+          onClick={() => navigate(`/chat/${whisky.SellerID}/${whisky.ItemID}`)}
+        >
+          Contact Seller
         </Button>
         <Button
           style={{

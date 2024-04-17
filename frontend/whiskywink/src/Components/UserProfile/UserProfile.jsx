@@ -85,6 +85,9 @@ function UserDetails() {
                   Email: {user.email}
                 </Typography>
                 <Typography variant="h5" align="center">
+                  ID: {user.id}
+                </Typography>
+                <Typography variant="h5" align="center">
                   Staff: {user.is_staff ? "Yes" : "No"}
                 </Typography>
                 <Typography variant="h5" align="center">
